@@ -27,6 +27,7 @@ public class ArrayBuilder {
 		}
 	
 	}
+	
 
 	public static void writeArray(String[][] array) throws IOException {
 		
@@ -99,6 +100,20 @@ public class ArrayBuilder {
 	
 		me.stun.startup.Console.TextArea.append("successfully saved matches to 'matches.txt'\n");
 	
+	}
+	
+	public static int[] listToArray(LinkedList<Integer> list) {
+
+		int[] output = new int[list.size()];
+
+		for (int i = 0; i < output.length; i++) {
+
+			output[i] = list.get(i);
+
+		}
+
+		return output;
+
 	}
 
 	public static int countLines(String path) throws IOException {

@@ -28,6 +28,7 @@ import org.json.simple.parser.ParseException;
 
 import me.stun.data.DeckData;
 import me.stun.list.ListUpdater;
+import me.stun.repair.RepairManager;
 import me.stun.thread.ProgressbarWorker;
 import me.stun.thread.UpdateWorker;
 
@@ -53,6 +54,7 @@ public class Window extends JFrame {
 	public static JLabel searchBarTitlePlayerTag;
 	public static JButton playerTagSearchButton;
 	public static JButton downloadMoreData;
+	public static JButton listRepair;
 
 	public static JLabel spellTitle;
 	public static JLabel winConditionTitle;
@@ -72,6 +74,7 @@ public class Window extends JFrame {
 	public static JProgressBar progressbar = new JProgressBar();
 	public static ProgressbarWorker worker = new ProgressbarWorker();
 	public static UpdateWorker updateWorker = new UpdateWorker();
+	public static RepairManager repairWorker = new RepairManager();
 	public static JPanel cupChartContainer = new JPanel();
 	public static JPanel timeChartContainer = new JPanel();
 
@@ -243,6 +246,7 @@ public class Window extends JFrame {
 					public void run() {
 
 						try {
+							me.stun.startup.Console.windowInstance.dispose();
 							me.stun.mainFile.main(null);
 						} catch (IOException | ParseException | InterruptedException e) {
 							e.printStackTrace();
@@ -306,7 +310,7 @@ public class Window extends JFrame {
 		searchBarTitlePlayerTag = new JLabel();
 		searchBarTitlePlayerTag.setBounds(30, 540, 241, 30);
 		searchBarTitlePlayerTag.setForeground(Color.WHITE);
-		searchBarTitlePlayerTag.setText("Search Player Tag");
+		searchBarTitlePlayerTag.setText("Search Player Tag (broken)");
 		searchBarTitlePlayerTag.setHorizontalAlignment(SwingConstants.LEFT);
 		cp.add(searchBarTitlePlayerTag);
 
@@ -366,9 +370,6 @@ public class Window extends JFrame {
 
 			}
 		});
-
-		cp.add(consoletoggle);
-
 		consoletoggle.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
 				consoletoggle.setBackground(new Color(0x363a3f));
@@ -378,7 +379,36 @@ public class Window extends JFrame {
 				consoletoggle.setBackground(dark);
 			}
 		});
+		cp.add(consoletoggle);
 
+		listRepair = new JButton("Repair List");
+		listRepair.setBackground(dark);
+		listRepair.setHorizontalAlignment(SwingConstants.CENTER);
+		listRepair.setVerticalAlignment(SwingConstants.CENTER);
+		listRepair.setForeground(Color.WHITE);
+		listRepair.setBounds(0, 300, 300, 50);
+		listRepair.setBorder(BorderFactory.createEmptyBorder());
+		listRepair.setFocusPainted(false);
+		listRepair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+
+				// repair code here
+				repairWorker.start();
+
+			}
+		});
+
+		listRepair.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				listRepair.setBackground(new Color(0x363a3f));
+			}
+
+			public void mouseExited(MouseEvent evt) {
+				listRepair.setBackground(dark);
+			}
+		});
+
+		cp.add(listRepair);
 		cp.add(playerTagSearchButton);
 
 		listUpdater = new ListUpdater();
