@@ -14,6 +14,7 @@ public class RepairManager extends Thread {
 		try {
 			MainProcess.removeDuplicates();
 			Console.printLine("successfully removed " + MainProcess.duplicateCount + " duplicateMatches");
+			Console.printLine("\nplease reload to apply changes");
 			me.stun.gui.Window.repairWorker.stop();
 		} catch (IOException e) {
 			e.printStackTrace();

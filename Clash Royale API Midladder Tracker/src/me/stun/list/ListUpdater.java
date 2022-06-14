@@ -26,6 +26,7 @@ public class ListUpdater extends Thread {
 			// System.out.println(me.Stun.IO.General.counter2);
 			
 			me.stun.gui.Window.downloadOutput.setText("reload to apply changes");
+			
 			running = false;
 			me.stun.gui.Window.listUpdater.stop();
 		} catch (Exception e) {
