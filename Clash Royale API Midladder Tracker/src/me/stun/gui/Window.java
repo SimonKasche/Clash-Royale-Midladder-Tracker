@@ -639,8 +639,8 @@ public class Window extends JFrame {
 		System.out.print("calculating bar chart data..\t");
 
 		JPanel barChartContainer = new JPanel();
-		barChartContainer.setSize(905, 400);
-		barChartContainer.setLocation(330, 100);
+		barChartContainer.setSize(920, 400);
+		barChartContainer.setLocation(315, 100);
 		DeckData.getCardUsage(me.stun.data.DeckData.totalMatches);
 		barChartContainer.add(me.stun.chart.BarChart.getBarChart("", playerTag, me.stun.data.DeckData.totalMatches));
 		cp.add(barChartContainer);
@@ -650,8 +650,8 @@ public class Window extends JFrame {
 		System.out.print("calculating cups data..\t");
 		cupChartContainer = new JPanel();
 		cupChartContainer.setBackground(menudark);
-		cupChartContainer.setSize(905, 400);
-		cupChartContainer.setLocation(330, 100);
+		cupChartContainer.setSize(920, 400);
+		cupChartContainer.setLocation(315, 100);
 		DeckData.getCardUsage(me.stun.data.DeckData.totalMatches);
 		cupChartContainer.add(me.stun.chart.CupsChart.getLineChart("", playerTag, me.stun.data.DeckData.totalMatches));
 		cupChartContainer.setVisible(false);
@@ -661,8 +661,8 @@ public class Window extends JFrame {
 		me.stun.startup.StartupImage.progressbar.setValue(95);
 
 		timeChartContainer = new JPanel();
-		timeChartContainer.setSize(905, 400);
-		timeChartContainer.setLocation(330, 100);
+		timeChartContainer.setSize(920, 400);
+		timeChartContainer.setLocation(315, 100);
 		timeChartContainer.setBackground(menudark);
 		DeckData.getCardUsage(me.stun.data.DeckData.totalMatches);
 		timeChartContainer.add(me.stun.chart.TimeChart.buildPlot());

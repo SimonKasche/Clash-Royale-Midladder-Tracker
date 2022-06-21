@@ -1,5 +1,6 @@
 package me.stun.chart;
 
+import java.awt.Color;
 import java.awt.BasicStroke;
 import java.util.LinkedList;
 
@@ -23,15 +24,6 @@ public class CupsChart {
 	public static JFrame frame = new JFrame();
 	public static String displayedCard = "Archer Queen";
 
-	public static void barChart(String applicationTitle, String chartTitle, String playerTag, String[][] matches) {
-		JFreeChart lineChart = ChartFactory.createXYLineChart(chartTitle, "Cups", "Percentage", createCupsDataset(),
-				PlotOrientation.VERTICAL, true, true, false);
-
-		ChartPanel chartPanel = new ChartPanel(lineChart);
-		chartPanel.setPreferredSize(new java.awt.Dimension(1920, 1080));
-		frame.setContentPane(chartPanel);
-	}
-
 	public static ChartPanel getLineChart(String chartTitle, String playerTag, String[][] matches) {
 		JFreeChart lineChart = ChartFactory.createXYLineChart(chartTitle, "Cups", "Percentage", createCupsDataset(),
 				PlotOrientation.VERTICAL, false, true, false);
@@ -41,14 +33,25 @@ public class CupsChart {
 		((AbstractRenderer) splineRenderer).setAutoPopulateSeriesStroke(false);
 		splineRenderer.setSeriesShapesVisible(0, false);
 		splineRenderer.setSeriesShapesVisible(1, false);
-
+		
 		lineChart.setBackgroundPaint(me.stun.gui.Window.menudark);
 		XYPlot plot = lineChart.getXYPlot();
 		plot.setRenderer(splineRenderer);
-		plot.setBackgroundPaint(me.stun.gui.Window.dark);
+			
+		plot.setDomainGridlinesVisible(false);
+		plot.setRangeGridlinesVisible(false);
+		plot.setBackgroundPaint(me.stun.gui.Window.menudark);	
+		plot.setOutlinePaint(me.stun.gui.Window.menudark);
+		
+		plot.getDomainAxis().setAxisLinePaint(Color.WHITE);
+		plot.getDomainAxis().setLabelPaint(Color.WHITE);
+		plot.getDomainAxis().setTickLabelPaint(Color.WHITE);
+		plot.getRangeAxis().setAxisLinePaint(Color.WHITE);
+		plot.getRangeAxis().setLabelPaint(Color.WHITE);
+		plot.getRangeAxis().setTickLabelPaint(Color.WHITE);
 
 		ChartPanel chartPanel = new ChartPanel(lineChart);
-		chartPanel.setPreferredSize(new java.awt.Dimension(905, 400));
+		chartPanel.setPreferredSize(new java.awt.Dimension(920, 400));
 		chartPanel.setBackground(me.stun.gui.Window.menudark);
 		return chartPanel;
 	}

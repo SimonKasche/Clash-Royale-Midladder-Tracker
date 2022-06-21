@@ -1,5 +1,6 @@
 package me.stun.chart;
 
+import java.awt.Color;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -10,6 +11,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -32,14 +34,26 @@ public class BarChart {
 		JFreeChart barChart = ChartFactory.createBarChart(chartTitle, "", "Percentage", createDataset(playerTag, matches),
 				PlotOrientation.VERTICAL, false, true, false);
 		
-		CategoryPlot categoryPlot = barChart.getCategoryPlot();
-		BarRenderer categoryItemRenderer = (BarRenderer) categoryPlot.getRenderer();
+		CategoryPlot plot = barChart.getCategoryPlot();
+		BarRenderer categoryItemRenderer = (BarRenderer) plot.getRenderer();
 		categoryItemRenderer.setShadowVisible(false);
+		categoryItemRenderer.setBarPainter(new StandardBarPainter());
+		
+		plot.setDomainGridlinesVisible(false);
+		plot.setRangeGridlinesVisible(false);
+		plot.setBackgroundPaint(me.stun.gui.Window.menudark);	
+		plot.setOutlinePaint(me.stun.gui.Window.menudark);	
+		
+		plot.getDomainAxis().setAxisLinePaint(Color.WHITE);
+		plot.getDomainAxis().setLabelPaint(Color.WHITE);
+		plot.getDomainAxis().setTickLabelPaint(Color.WHITE);
+		plot.getRangeAxis().setAxisLinePaint(Color.WHITE);
+		plot.getRangeAxis().setLabelPaint(Color.WHITE);
+		plot.getRangeAxis().setTickLabelPaint(Color.WHITE);
 		
 		barChart.setBackgroundPaint(me.stun.gui.Window.menudark);
-		barChart.getPlot().setBackgroundPaint(me.stun.gui.Window.dark);
 		ChartPanel chartPanel = new ChartPanel(barChart);
-		chartPanel.setPreferredSize(new java.awt.Dimension(905, 400));
+		chartPanel.setPreferredSize(new java.awt.Dimension(920, 400));
 		chartPanel.setBackground(me.stun.gui.Window.menudark);
 		return chartPanel;
 	}

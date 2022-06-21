@@ -2,6 +2,7 @@
 package me.stun.chart;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -46,11 +47,22 @@ public class TimeChart {
 		chart.getXYPlot().getRangeAxis().setUpperMargin(0.25);
 		chart.setBackgroundPaint(me.stun.gui.Window.menudark);
 		XYPlot plot = chart.getXYPlot();
-		plot.setRenderer(0, splineRenderer);
-		plot.setBackgroundPaint(me.stun.gui.Window.dark);
+		plot.setRenderer(0, splineRenderer);	
+		
+		plot.setDomainGridlinesVisible(false);
+		plot.setRangeGridlinesVisible(false);
+		plot.setBackgroundPaint(me.stun.gui.Window.menudark);	
+		plot.setOutlinePaint(me.stun.gui.Window.menudark);
+		
+		plot.getDomainAxis().setAxisLinePaint(Color.WHITE);
+		plot.getDomainAxis().setLabelPaint(Color.WHITE);
+		plot.getDomainAxis().setTickLabelPaint(Color.WHITE);
+		plot.getRangeAxis().setAxisLinePaint(Color.WHITE);
+		plot.getRangeAxis().setLabelPaint(Color.WHITE);
+		plot.getRangeAxis().setTickLabelPaint(Color.WHITE);
 
 		ChartPanel chartPanel = new ChartPanel(chart);
-		chartPanel.setPreferredSize(new java.awt.Dimension(905, 400));
+		chartPanel.setPreferredSize(new java.awt.Dimension(920, 400));
 		chartPanel.setBackground(me.stun.gui.Window.menudark);
 		return chartPanel;
 	}
