@@ -208,8 +208,6 @@ public class IO {
 			usedTags[i] = " ";
 		}
 
-		printArray(usedTags);
-
 	}
 
 	public static int counter2 = 0;

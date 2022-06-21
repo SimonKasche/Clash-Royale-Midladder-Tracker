@@ -10,7 +10,7 @@ import org.json.simple.parser.ParseException;
 
 import me.stun.startup.Console;
 
-public class ConnectionRessources {
+public class Update {
 
 	private static final DecimalFormat df = new DecimalFormat("0.000");
 	public static boolean wait = false;
@@ -44,6 +44,12 @@ public class ConnectionRessources {
 						me.stun.gui.Window.listUpdater.wait();
 					}
 
+				}if(me.stun.list.ListUpdater.stop == true) {
+					
+					//stop download
+					me.stun.gui.Window.stopDownload.setText("Stopping..");
+					IO.playerTagCounter = playerTags.size();
+					
 				}
 
 			} catch (Exception e) {
@@ -78,10 +84,9 @@ public class ConnectionRessources {
 			} catch (Exception e) {
 				Console.printLine("parsing failed");
 			}
-			Console.printLine("getting players " + i + "/50");
+			Console.print("getting players " + i + "/50\t");
+			Console.printLine("playerTags.size() = " + output.size());
 		}
-
-		Console.printLine("playerTags.size() = " + output.size());
 
 		return output;
 

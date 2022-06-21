@@ -54,6 +54,8 @@ public class Window extends JFrame {
 	public static JLabel searchBarTitlePlayerTag;
 	public static JButton playerTagSearchButton;
 	public static JButton downloadMoreData;
+	public static JButton pauseDownload;
+	public static JButton stopDownload;
 	public static JButton listRepair;
 
 	public static JLabel spellTitle;
@@ -393,7 +395,11 @@ public class Window extends JFrame {
 			public void actionPerformed(ActionEvent evt) {
 
 				// repair code here
-				repairWorker.start();
+				if (me.stun.list.ListUpdater.running == false) {
+					repairWorker.start();
+				} else {
+					output.setText("wait until download is finished..");
+				}
 
 			}
 		});
@@ -411,8 +417,10 @@ public class Window extends JFrame {
 		cp.add(listRepair);
 		cp.add(playerTagSearchButton);
 
-		listUpdater = new ListUpdater();
+		// Download More Data
+		// ------------------------------------------------------------------------------------------------------------------------
 
+		listUpdater = new ListUpdater();
 		downloadMoreData = new JButton("Update Matches");
 		downloadMoreData.setBackground(dark);
 		downloadMoreData.setHorizontalAlignment(SwingConstants.CENTER);
@@ -429,34 +437,19 @@ public class Window extends JFrame {
 
 					if (me.stun.list.ListUpdater.running == false) {
 						// start downloading
-						downloadMoreData.setText("Pause Download");
+						downloadMoreData.setVisible(false);
+						pauseDownload.setVisible(true);
+						stopDownload.setVisible(true);
+
 						downloadOutput.setText("downloading..");
 
 						listUpdater.start();
-
-					} else {
-						// pause downloading
-
-						if (me.stun.list.ConnectionRessources.wait == false) {
-							downloadMoreData.setText("Resume Download");
-							me.stun.list.ConnectionRessources.wait = true;
-
-						} else {
-
-							downloadMoreData.setText("Pause Download");
-							listUpdater.notify();
-							me.stun.list.ConnectionRessources.wait = false;
-
-						}
 
 					}
 				}
 
 			}
 		});
-
-		me.stun.startup.StartupImage.progressbar.setValue(35);
-
 		downloadMoreData.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
 				downloadMoreData.setBackground(new Color(0x363a3f));
@@ -468,6 +461,80 @@ public class Window extends JFrame {
 		});
 
 		cp.add(downloadMoreData);
+
+		pauseDownload = new JButton("Pause Download");
+		pauseDownload.setBackground(dark);
+		pauseDownload.setHorizontalAlignment(SwingConstants.CENTER);
+		pauseDownload.setVerticalAlignment(SwingConstants.CENTER);
+		pauseDownload.setForeground(Color.WHITE);
+		pauseDownload.setBounds(0, 250, 150, 50);
+		pauseDownload.setBorder(BorderFactory.createEmptyBorder());
+		pauseDownload.setFocusPainted(false);
+		pauseDownload.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent evt) {
+
+				synchronized (listUpdater) {
+
+					if (me.stun.list.Update.wait == false) {
+						pauseDownload.setText("Resume Download");
+						me.stun.list.Update.wait = true;
+
+					} else {
+
+						pauseDownload.setText("Pause Download");
+						listUpdater.notify();
+						me.stun.list.Update.wait = false;
+
+					}
+
+				}
+
+			}
+		});
+		pauseDownload.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				pauseDownload.setBackground(new Color(0x363a3f));
+			}
+
+			public void mouseExited(MouseEvent evt) {
+				pauseDownload.setBackground(dark);
+			}
+		});
+		pauseDownload.setVisible(false);
+		cp.add(pauseDownload);
+
+		stopDownload = new JButton("Stop Download");
+		stopDownload.setBackground(dark);
+		stopDownload.setHorizontalAlignment(SwingConstants.CENTER);
+		stopDownload.setVerticalAlignment(SwingConstants.CENTER);
+		stopDownload.setForeground(Color.WHITE);
+		stopDownload.setBounds(150, 250, 150, 50);
+		stopDownload.setBorder(BorderFactory.createEmptyBorder());
+		stopDownload.setFocusPainted(false);
+		stopDownload.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent evt) {
+
+				me.stun.list.ListUpdater.stop = true;
+
+			}
+		});
+		stopDownload.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				stopDownload.setBackground(new Color(0x363a3f));
+			}
+
+			public void mouseExited(MouseEvent evt) {
+				stopDownload.setBackground(dark);
+			}
+		});
+		stopDownload.setVisible(false);
+		cp.add(stopDownload);
+
+		// ---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+		me.stun.startup.StartupImage.progressbar.setValue(35);
 
 		downloadOutput = new JLabel();
 		downloadOutput.setBounds(0, 300, 300, 20);

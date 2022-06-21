@@ -8,10 +8,10 @@ public class RepairManager extends Thread {
 
 	@SuppressWarnings("deprecation")
 	public void run() {
-
-		MainProcess.matches = me.stun.data.DeckData.totalMatches;
-		MainProcess.repair();
+		
 		try {
+			MainProcess.matches = me.stun.io.ArrayBuilder.readPreviousMatchesArray();
+			MainProcess.repair();
 			MainProcess.removeDuplicates();
 			Console.printLine("successfully removed " + MainProcess.duplicateCount + " duplicateMatches");
 			Console.printLine("\nplease reload to apply changes");
