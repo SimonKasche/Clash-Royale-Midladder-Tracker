@@ -33,16 +33,16 @@ public class CupsChart {
 		((AbstractRenderer) splineRenderer).setAutoPopulateSeriesStroke(false);
 		splineRenderer.setSeriesShapesVisible(0, false);
 		splineRenderer.setSeriesShapesVisible(1, false);
-		
+
 		lineChart.setBackgroundPaint(me.stun.gui.Window.menudark);
 		XYPlot plot = lineChart.getXYPlot();
 		plot.setRenderer(splineRenderer);
-			
+
 		plot.setDomainGridlinesVisible(false);
 		plot.setRangeGridlinesVisible(false);
-		plot.setBackgroundPaint(me.stun.gui.Window.menudark);	
+		plot.setBackgroundPaint(me.stun.gui.Window.menudark);
 		plot.setOutlinePaint(me.stun.gui.Window.menudark);
-		
+
 		plot.getDomainAxis().setAxisLinePaint(Color.WHITE);
 		plot.getDomainAxis().setLabelPaint(Color.WHITE);
 		plot.getDomainAxis().setTickLabelPaint(Color.WHITE);
@@ -123,6 +123,7 @@ public class CupsChart {
 		XYSeries average = new XYSeries("average");
 
 		int stepSize = cupValues.size() / 21;
+		int steps = cupValues.size() / 10;
 
 		for (int i = 0; i < cupValues.size(); i++) {
 
@@ -167,9 +168,16 @@ public class CupsChart {
 
 			}
 
-			if (i % stepSize == 0)
+			if (i % stepSize == 0) {
 				me.stun.startup.StartupImage.plotProgressbar
 						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			}
+			if (i % steps == 0) {
+
+				me.stun.startup.StartupImage.progressbar
+						.setValue(me.stun.startup.StartupImage.progressbar.getValue() + 1);
+
+			}
 
 			me.stun.thread.ProgressbarWorker.progress = me.stun.thread.ProgressbarWorker.progress + 3;
 

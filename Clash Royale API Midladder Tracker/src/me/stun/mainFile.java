@@ -18,7 +18,7 @@ public class mainFile {
 			me.stun.net.ConnectionResources.getPlayerData();
 		} catch (Exception e) {
 		}
-		me.stun.startup.StartupImage.progressbar.setValue(20);
+		me.stun.startup.StartupImage.progressbar.setValue(35);
 		me.stun.startup.Console.TextArea.append("opening window..\n");
 
 		new me.stun.gui.Window(me.stun.data.DeckData.totalMatches, null);

@@ -47,13 +47,13 @@ public class TimeChart {
 		chart.getXYPlot().getRangeAxis().setUpperMargin(0.25);
 		chart.setBackgroundPaint(me.stun.gui.Window.menudark);
 		XYPlot plot = chart.getXYPlot();
-		plot.setRenderer(0, splineRenderer);	
-		
+		plot.setRenderer(0, splineRenderer);
+
 		plot.setDomainGridlinesVisible(false);
 		plot.setRangeGridlinesVisible(false);
-		plot.setBackgroundPaint(me.stun.gui.Window.menudark);	
+		plot.setBackgroundPaint(me.stun.gui.Window.menudark);
 		plot.setOutlinePaint(me.stun.gui.Window.menudark);
-		
+
 		plot.getDomainAxis().setAxisLinePaint(Color.WHITE);
 		plot.getDomainAxis().setLabelPaint(Color.WHITE);
 		plot.getDomainAxis().setTickLabelPaint(Color.WHITE);
@@ -172,6 +172,7 @@ public class TimeChart {
 			stepSize++;
 		me.stun.startup.StartupImage.plotProgressbar.setValue(0);
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(true);
+		int steps = times.size() / 10;
 
 		int index = 0;
 
@@ -224,7 +225,7 @@ public class TimeChart {
 
 				float value = (float) cardCount / matchcounter * 100;
 				series.add(Double.parseDouble(times.get(i)), value);
-				if (i % 10 == 0  || i == times.size() - 1)
+				if (i % 10 == 0 || i == times.size() - 1)
 					smooth.add(Double.parseDouble(times.get(i)), value);
 
 			}
@@ -233,6 +234,12 @@ public class TimeChart {
 				me.stun.startup.StartupImage.plotProgressbar
 						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 5);
 				me.stun.thread.ProgressbarWorker.progress = me.stun.thread.ProgressbarWorker.progress + 2;
+			}
+			if (i % steps == 0) {
+
+				me.stun.startup.StartupImage.progressbar
+						.setValue(me.stun.startup.StartupImage.progressbar.getValue() + 1);
+
 			}
 
 		}
@@ -243,7 +250,7 @@ public class TimeChart {
 		float averageFloat = me.stun.data.DataProcessor.getPercentage(DeckData.totalMatches, displayedCard);
 		average.add(Double.parseDouble(times.get(0)), averageFloat);
 		average.add(Double.parseDouble(times.get(times.size() - 1)), averageFloat);
-		
+
 		dataset.addSeries(smooth);
 		dataset.addSeries(average);
 		dataset.addSeries(series);

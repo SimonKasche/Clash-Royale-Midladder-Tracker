@@ -1,5 +1,6 @@
 package me.stun.chart;
 
+import java.awt.Color;
 import java.awt.Dimension;
 
 import org.jfree.chart.ChartPanel;
@@ -23,13 +24,20 @@ public class SplashDial {
 		dataset = new DefaultValueDataset(me.stun.data.DeckData.getSplashAverage(matches));
 		
 		DialPlot plot = new DialPlot(dataset);
-		plot.setDialFrame(new StandardDialFrame());
-		plot.addLayer(new DialPointer.Pointer());
-
+		StandardDialFrame dialFrame = new StandardDialFrame();
+		DialPointer.Pointer pointer = new DialPointer.Pointer();
 		StandardDialScale scale = new StandardDialScale(minimumValue, maximumValue, -120, -300, majorTickGap,
 				majorTickGap - 1);
+		
+		dialFrame.setForegroundPaint(Color.WHITE);
 		scale.setTickRadius(0.88);
 		scale.setTickLabelOffset(0.20);
+		scale.setMajorTickPaint(Color.WHITE);
+		pointer.setFillPaint(Color.WHITE);
+		pointer.setOutlinePaint(Color.BLACK);
+		
+		plot.setDialFrame(dialFrame);
+		plot.addLayer(pointer);
 		plot.addScale(0, scale);
 		
 		DialBackground background = new DialBackground(Window.menudark);

@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -79,6 +80,11 @@ public class Window extends JFrame {
 	public static RepairManager repairWorker = new RepairManager();
 	public static JPanel cupChartContainer = new JPanel();
 	public static JPanel timeChartContainer = new JPanel();
+	
+	public static JCheckBox averageBox = new JCheckBox();
+	public static JCheckBox rawDataBox = new JCheckBox();
+	public static JCheckBox smoothBox = new JCheckBox();
+	public static JCheckBox densityBox = new JCheckBox();
 
 	public static ListUpdater listUpdater;
 
@@ -547,21 +553,21 @@ public class Window extends JFrame {
 		spellTitle.setText("Spells / Deck");
 		spellTitle.setForeground(Color.WHITE);
 		spellTitle.setSize(200, 30);
-		spellTitle.setLocation(537, 500);
+		spellTitle.setLocation(433, 500);
 		cp.add(spellTitle);
 
 		winConditionTitle = new JLabel();
 		winConditionTitle.setText("Win Conditions / Deck");
 		winConditionTitle.setForeground(Color.WHITE);
 		winConditionTitle.setSize(200, 30);
-		winConditionTitle.setLocation(714, 500);
+		winConditionTitle.setLocation(640, 500);
 		cp.add(winConditionTitle);
 
 		splashTitle = new JLabel();
 		splashTitle.setText("Splash Cards / Deck");
 		splashTitle.setForeground(Color.WHITE);
 		splashTitle.setSize(200, 30);
-		splashTitle.setLocation(915, 500);
+		splashTitle.setLocation(895, 500);
 		cp.add(splashTitle);
 
 		matchesCounter = new JLabel();
@@ -586,6 +592,8 @@ public class Window extends JFrame {
 		recorded.setSize(200, 60);
 		recorded.setLocation(1134, 625);
 		cp.add(recorded);
+		
+		//TODO CheckBoxes
 
 		System.out.println("converting list to array");
 		// me.Stun.Chart.deckData.matchesToArray();
@@ -595,7 +603,7 @@ public class Window extends JFrame {
 
 		ChartPanel spells = me.stun.chart.SpellsDial.buildDialPlot(me.stun.data.DeckData.totalMatches, 0, 4, 1);
 		spells.setBackground(dark);
-		spells.setLocation(475, 530);
+		spells.setLocation(370, 530);
 		spells.setSize(200, 200);
 		cp.add(spells);
 
@@ -604,7 +612,7 @@ public class Window extends JFrame {
 		ChartPanel winConditions = me.stun.chart.WinConditionDial.buildDialPlot(me.stun.data.DeckData.totalMatches, 0,
 				3, 1);
 		winConditions.setBackground(dark);
-		winConditions.setLocation(675, 530);
+		winConditions.setLocation(610, 530);
 		winConditions.setSize(200, 200);
 		cp.add(winConditions);
 
@@ -612,7 +620,7 @@ public class Window extends JFrame {
 
 		ChartPanel splash = me.stun.chart.SplashDial.buildDialPlot(me.stun.data.DeckData.totalMatches, 0, 6, 1);
 		splash.setBackground(dark);
-		splash.setLocation(875, 530);
+		splash.setLocation(850, 530);
 		splash.setSize(200, 200);
 		cp.add(splash);
 
@@ -652,22 +660,21 @@ public class Window extends JFrame {
 		cupChartContainer.setBackground(menudark);
 		cupChartContainer.setSize(920, 400);
 		cupChartContainer.setLocation(315, 100);
-		DeckData.getCardUsage(me.stun.data.DeckData.totalMatches);
 		cupChartContainer.add(me.stun.chart.CupsChart.getLineChart("", playerTag, me.stun.data.DeckData.totalMatches));
 		cupChartContainer.setVisible(false);
 		cp.add(cupChartContainer);
 		System.out.print("done");
 
-		me.stun.startup.StartupImage.progressbar.setValue(95);
-
+		me.stun.startup.StartupImage.progressbar.setValue(90);
+		System.out.print("calculating time chart data..\t");
 		timeChartContainer = new JPanel();
 		timeChartContainer.setSize(920, 400);
 		timeChartContainer.setLocation(315, 100);
 		timeChartContainer.setBackground(menudark);
-		DeckData.getCardUsage(me.stun.data.DeckData.totalMatches);
 		timeChartContainer.add(me.stun.chart.TimeChart.buildPlot());
 		timeChartContainer.setVisible(false);
 		cp.add(timeChartContainer);
+		System.out.print("done");
 
 		me.stun.startup.StartupImage.progressbar.setValue(100);
 

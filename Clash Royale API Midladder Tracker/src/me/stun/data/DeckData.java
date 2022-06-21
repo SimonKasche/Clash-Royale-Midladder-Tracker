@@ -12,31 +12,32 @@ public class DeckData {
 
 	public static Map<String, Integer> cardCounter = new HashMap<String, Integer>();
 	public static Map<String, Integer> sortedCardCounter;
-	
+
 	public static String[][] totalMatches;
-	
-	public static String[][] matchesToArray(LinkedList<String[]> matches) {		
-		
+
+	public static String[][] matchesToArray(LinkedList<String[]> matches) {
+
 		String[][] output = new String[matches.size()][matches.get(0).length];
-		
-		for(int i = 0;i<output.length;i++) {
-			for(int j = 0;j<output[i].length;j++) {
+
+		for (int i = 0; i < output.length; i++) {
+			for (int j = 0; j < output[i].length; j++) {
 				output[i][j] = matches.get(i)[j];
 			}
-			
+
 		}
-		
+
 		return output;
-		
+
 	}
-	
+
 	public static void getCardUsage(String[][] matches) {
 
 		int counter = 0;
-		
+
 		me.stun.startup.StartupImage.plotProgressbar.setValue(0);
 		int stepSize = cards.length / 100;
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(true);
+		int steps = cards.length / 35;
 
 		for (int i = 0; i < cards.length; i++) {
 
@@ -44,8 +45,8 @@ public class DeckData {
 
 				for (int k = 0; k < 9; k++) {
 
-					if (cards[i].equals(matches[j][k])) {						
-						
+					if (cards[i].equals(matches[j][k])) {
+
 						counter++;
 						k = 8;
 
@@ -54,18 +55,21 @@ public class DeckData {
 				}
 
 			}
-			
+
 			cardCounter.put(cards[i], counter);
 			counter = 0;
-			
+
 			if (i % stepSize == 0)
 				me.stun.startup.StartupImage.plotProgressbar
 						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			if (i % steps == 0)
+				me.stun.startup.StartupImage.progressbar
+						.setValue(me.stun.startup.StartupImage.progressbar.getValue() + 1);
 
 		}
 
 		sortedCardCounter = sortByValue(cardCounter, false);
-		
+
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(false);
 
 	}
@@ -75,7 +79,7 @@ public class DeckData {
 		int counter = 0;
 
 		int[] usage = new int[matches.length];
-		
+
 		me.stun.startup.StartupImage.plotProgressbar.setValue(0);
 		int stepSize = matches.length / 100;
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(true);
@@ -89,12 +93,11 @@ public class DeckData {
 					if (spells[j].equals(matches[i][k])) {
 
 						counter++;
-						k = 8;						
+						k = 8;
 
 					}
 
 				}
-				
 
 			}
 			usage[i] = counter;
@@ -112,7 +115,7 @@ public class DeckData {
 			sum = sum + usage[i];
 
 		}
-		
+
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(false);
 		return (float) sum / usage.length;
 
@@ -123,7 +126,7 @@ public class DeckData {
 		int counter = 0;
 
 		int[] usage = new int[matches.length];
-		
+
 		me.stun.startup.StartupImage.plotProgressbar.setValue(0);
 		int stepSize = matches.length / 100;
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(true);
@@ -146,7 +149,7 @@ public class DeckData {
 			}
 			usage[i] = counter;
 			counter = 0;
-			
+
 			if (i % stepSize == 0)
 				me.stun.startup.StartupImage.plotProgressbar
 						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
@@ -159,7 +162,7 @@ public class DeckData {
 			sum = sum + usage[i];
 
 		}
-		
+
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(false);
 		return (float) sum / usage.length;
 
@@ -170,7 +173,7 @@ public class DeckData {
 		int counter = 0;
 
 		int[] usage = new int[matches.length];
-		
+
 		me.stun.startup.StartupImage.plotProgressbar.setValue(0);
 		int stepSize = matches.length / 100;
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(true);
@@ -193,7 +196,7 @@ public class DeckData {
 			}
 			usage[i] = counter;
 			counter = 0;
-			
+
 			if (i % stepSize == 0)
 				me.stun.startup.StartupImage.plotProgressbar
 						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);

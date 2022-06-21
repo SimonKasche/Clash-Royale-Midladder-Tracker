@@ -65,6 +65,7 @@ public class ArrayBuilder {
 		BufferedReader br = new BufferedReader(new FileReader("matches.txt"));
 	
 		String[] deck = new String[9];
+		int steps = lines / 35;
 	
 		for (int i = 0; i < lines; i++) {
 			String line = br.readLine();
@@ -76,6 +77,11 @@ public class ArrayBuilder {
 				if (deck != null && deck.length > 9)
 					readMatches[i] = (deck);
 			}
+			
+			if(i % steps == 0) {
+				me.stun.startup.StartupImage.progressbar.setValue(me.stun.startup.StartupImage.progressbar.getValue() + 1);
+			}
+			
 		}
 	
 		br.close();

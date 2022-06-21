@@ -60,14 +60,16 @@ public class BarChart {
 
 	private static CategoryDataset createDataset(String playerTag, String[][] matches) {
 		final DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
+		
 		for (int i = 0; i < DeckData.cardCounter.size(); i++) {
 
 			for (Map.Entry<String, Integer> entry : DeckData.sortedCardCounter.entrySet()) {
 				if (entry.getValue() != 0) {
 					dataset.addValue((float) entry.getValue() / matches.length * 100, entry.getKey(), "");
 				}
-			}
+			}	
+				
+			
 
 		}
 
