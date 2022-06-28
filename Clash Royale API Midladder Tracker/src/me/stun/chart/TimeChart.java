@@ -3,6 +3,7 @@ package me.stun.chart;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.LinkedList;
 
 import javax.swing.JFrame;
@@ -10,6 +11,7 @@ import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.AbstractRenderer;
@@ -32,7 +34,7 @@ public class TimeChart {
 
 		dataset = createTimeDataset();
 
-		JFreeChart chart = ChartFactory.createXYLineChart("", "time", "usage", dataset, PlotOrientation.VERTICAL, false,
+		JFreeChart chart = ChartFactory.createXYLineChart("", "time", "usage", dataset, PlotOrientation.VERTICAL, true,
 				true, false);
 
 		XYSplineRenderer splineRenderer = new XYSplineRenderer();
@@ -42,10 +44,15 @@ public class TimeChart {
 		splineRenderer.setSeriesShapesVisible(1, false);
 		splineRenderer.setSeriesShapesVisible(2, false);
 		splineRenderer.setPrecision(1);
+		splineRenderer.setBaseLegendShape(new Rectangle(150, 10));
+		splineRenderer.setLegendLine(new Rectangle(90,1));
 
 		chart.getXYPlot().getRangeAxis().setLowerMargin(0.1);
 		chart.getXYPlot().getRangeAxis().setUpperMargin(0.25);
 		chart.setBackgroundPaint(me.stun.gui.Window.menudark);
+		chart.getLegend().setBackgroundPaint(me.stun.gui.Window.menudark);
+		chart.getLegend().setFrame(BlockBorder.NONE);
+		chart.getLegend().setItemPaint(Color.WHITE);
 		XYPlot plot = chart.getXYPlot();
 		plot.setRenderer(0, splineRenderer);
 

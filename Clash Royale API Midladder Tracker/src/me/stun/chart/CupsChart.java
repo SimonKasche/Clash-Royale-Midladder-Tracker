@@ -1,6 +1,7 @@
 package me.stun.chart;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.awt.BasicStroke;
 import java.util.LinkedList;
 
@@ -9,6 +10,7 @@ import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.AbstractRenderer;
@@ -23,18 +25,25 @@ public class CupsChart {
 
 	public static JFrame frame = new JFrame();
 	public static String displayedCard = "Archer Queen";
+	public static XYSeries density;
 
 	public static ChartPanel getLineChart(String chartTitle, String playerTag, String[][] matches) {
 		JFreeChart lineChart = ChartFactory.createXYLineChart(chartTitle, "Cups", "Percentage", createCupsDataset(),
-				PlotOrientation.VERTICAL, false, true, false);
+				PlotOrientation.VERTICAL, true, true, false);
 
 		XYSplineRenderer splineRenderer = new XYSplineRenderer();
 		splineRenderer.setBaseStroke(new BasicStroke(3.0f));
 		((AbstractRenderer) splineRenderer).setAutoPopulateSeriesStroke(false);
 		splineRenderer.setSeriesShapesVisible(0, false);
 		splineRenderer.setSeriesShapesVisible(1, false);
+		splineRenderer.setSeriesShapesVisible(2, false);
+		splineRenderer.setBaseLegendShape(new Rectangle(150, 10));
+		splineRenderer.setLegendLine(new Rectangle(90,1));
 
 		lineChart.setBackgroundPaint(me.stun.gui.Window.menudark);
+		lineChart.getLegend().setBackgroundPaint(me.stun.gui.Window.menudark);
+		lineChart.getLegend().setFrame(BlockBorder.NONE);
+		lineChart.getLegend().setItemPaint(Color.WHITE);
 		XYPlot plot = lineChart.getXYPlot();
 		plot.setRenderer(splineRenderer);
 
@@ -121,6 +130,7 @@ public class CupsChart {
 		XYSeriesCollection dataset = new XYSeriesCollection();
 		XYSeries series = new XYSeries(DeckData.cards[index]);
 		XYSeries average = new XYSeries("average");
+		density = new XYSeries("density");
 
 		int stepSize = cupValues.size() / 21;
 		int steps = cupValues.size() / 10;
@@ -154,7 +164,7 @@ public class CupsChart {
 						}
 
 					}
-
+					
 					matchcounter++;
 
 				}
@@ -165,6 +175,9 @@ public class CupsChart {
 
 				float value = (float) cardCount / matchcounter * 100;
 				series.add((double) cupValues.get(i), value);
+				
+				float densityValue = (float) matchcounter / matches.length * 100;
+				density.add((double) cupValues.get(i), densityValue);
 
 			}
 
@@ -191,8 +204,8 @@ public class CupsChart {
 		average.add((double) cupValues.get(cupValues.size() - 1), averageFloat);
 
 		dataset.addSeries(average);
-
 		dataset.addSeries(series);
+		dataset.addSeries(density);
 		return dataset;
 
 	}

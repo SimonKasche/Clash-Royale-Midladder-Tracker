@@ -75,6 +75,7 @@ public class Window extends JFrame {
 
 	public static JComboBox<String> cardMenu;
 	public static JProgressBar progressbar = new JProgressBar();
+	public static JProgressBar downloadProgressBar;
 	public static ProgressbarWorker worker = new ProgressbarWorker();
 	public static UpdateWorker updateWorker = new UpdateWorker();
 	public static RepairManager repairWorker = new RepairManager();
@@ -136,7 +137,14 @@ public class Window extends JFrame {
 		progressbar.setForeground(Color.GREEN);
 		progressbar.setVisible(false);
 		cp.add(progressbar);
-
+		
+		downloadProgressBar = new JProgressBar();
+		downloadProgressBar.setBounds(0, 350, 299, 10);
+		downloadProgressBar.setValue(0);
+		downloadProgressBar.setForeground(Color.GREEN);
+		downloadProgressBar.setVisible(false);
+		cp.add(downloadProgressBar);
+		
 		JLabel title = new JLabel();
 		title.setText("Midladder Tracker");
 		title.setFont(font);

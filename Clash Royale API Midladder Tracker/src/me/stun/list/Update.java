@@ -31,8 +31,13 @@ public class Update {
 
 				Long start = System.nanoTime();
 				LinkedList<String[]> matches = me.stun.io.ParseJsonFile.readBattleHistory();
-
 				IO.addNewMatches(matches);
+				
+				
+				double percentage = (double) playerTags.size() / IO.playerTagCounter * 100;
+				me.stun.gui.Window.downloadProgressBar.setValue((int) percentage);
+				
+				
 				Console.print("\t" + IO.playerTagCounter + "/" + playerTags.size() + "\t addedmatches.size() = "
 						+ IO.addedMatches.size());
 				Console.print("\tcalc = " + df.format((System.nanoTime() - start) / 1e+9) + "s");

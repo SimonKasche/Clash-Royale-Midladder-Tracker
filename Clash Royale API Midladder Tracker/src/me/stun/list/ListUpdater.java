@@ -11,7 +11,9 @@ public class ListUpdater extends Thread {
 	public void run() {
 		
 		running = true;
-
+		me.stun.gui.Window.downloadProgressBar.setVisible(true);
+		me.stun.gui.Window.downloadProgressBar.setValue(0);
+		
 		try {
 			Long start = System.nanoTime();
 
@@ -32,7 +34,7 @@ public class ListUpdater extends Thread {
 			me.stun.gui.Window.pauseDownload.setVisible(false);
 			me.stun.gui.Window.downloadMoreData.setVisible(true);
 			me.stun.gui.Window.stopDownload.setText("Stop Download");
-			
+			me.stun.gui.Window.downloadProgressBar.setVisible(true);
 			me.stun.gui.Window.listUpdater.stop();
 		} catch (Exception e) {
 			Console.printLine(e.toString());

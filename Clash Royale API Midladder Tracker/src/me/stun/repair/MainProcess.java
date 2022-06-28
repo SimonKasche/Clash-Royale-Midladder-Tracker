@@ -39,8 +39,11 @@ public class MainProcess {
 				StringBuilder sb = new StringBuilder(temp);
 				sb.setCharAt(index, '.');
 
-				estimation = Double.parseDouble(sb.toString());
-
+				try {
+					estimation = Double.parseDouble(sb.toString());
+				} catch (Exception e) {
+					Console.printLine("estimating time failed..");
+				}
 				startEstimation = System.nanoTime();
 			}
 
@@ -57,18 +60,25 @@ public class MainProcess {
 
 					}
 				} catch (Exception e) {
-					//System.out.println("null value");
+					// System.out.println("null value");
 				}
 
 			}
 
 			Long end = System.nanoTime();
 			double resultSeconds = end - start;
-
+			int percentage = 0;
+			
+			if (i != 0) {
+				double temp = (double) i / matches.length * 100;
+				percentage = (int) temp;
+			}
+			
 			Console.printLine("analyzing: " + i + "/" + matches.length + "\tduplicates.size() = " + duplicateCount
 					+ "\ttime/match: " + df.format(resultSeconds / 1000000) + "ms\testimated time remaining: "
 					+ estimation + "min");
-
+			
+			me.stun.gui.Window.downloadProgressBar.setValue(percentage);
 		}
 
 	}
