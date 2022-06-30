@@ -11,13 +11,7 @@ public class mainFile {
 		new me.stun.startup.Console();
 		new me.stun.startup.StartupImage();
 		
-		me.stun.data.DeckData.totalMatches = me.stun.io.ArrayBuilder.readPreviousMatchesArray();	
-		me.stun.startup.StartupImage.progressbar.setValue(10);
-
-		try {
-			me.stun.net.ConnectionResources.getPlayerData();
-		} catch (Exception e) {
-		}
+		me.stun.data.DeckData.totalMatches = me.stun.io.ArrayBuilder.readPreviousMatchesArray();
 		me.stun.startup.StartupImage.progressbar.setValue(35);
 		me.stun.startup.Console.TextArea.append("opening window..\n");
 

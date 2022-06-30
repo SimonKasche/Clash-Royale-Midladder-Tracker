@@ -17,7 +17,7 @@ public class Update {
 
 	public static void getPlayerData() throws IOException, ParseException {
 
-		IO.playerTags = readFile("src/UpdaterPlayerTag.txt");
+		IO.playerTags = readFile("src/PlayerTag.txt");
 		LinkedList<String> playerTags = getPlayerTags();
 		IO.getUsedTags();
 
@@ -32,12 +32,10 @@ public class Update {
 				Long start = System.nanoTime();
 				LinkedList<String[]> matches = me.stun.io.ParseJsonFile.readBattleHistory();
 				IO.addNewMatches(matches);
-				
-				
+
 				double percentage = (double) playerTags.size() / IO.playerTagCounter * 100;
 				me.stun.gui.Window.downloadProgressBar.setValue((int) percentage);
-				
-				
+
 				Console.print("\t" + IO.playerTagCounter + "/" + playerTags.size() + "\t addedmatches.size() = "
 						+ IO.addedMatches.size());
 				Console.print("\tcalc = " + df.format((System.nanoTime() - start) / 1e+9) + "s");
@@ -49,12 +47,13 @@ public class Update {
 						me.stun.gui.Window.listUpdater.wait();
 					}
 
-				}if(me.stun.list.ListUpdater.stop == true) {
-					
-					//stop download
+				}
+				if (me.stun.list.ListUpdater.stop == true) {
+
+					// stop download
 					me.stun.gui.Window.stopDownload.setText("Stopping..");
 					IO.playerTagCounter = playerTags.size();
-					
+
 				}
 
 			} catch (Exception e) {
@@ -69,32 +68,37 @@ public class Update {
 	public static LinkedList<String> getPlayerTags() throws IOException, ParseException {
 
 		LinkedList<String> output = new LinkedList<String>();
-		me.stun.net.Connection.getPlayerClanTag(IO.playerTags[0]);
-		String clanTag = me.stun.io.ParseJsonFile.readClanTag();
+		int steps = 50 * IO.playerTags.length;
+		int counter = 0;
 
-		me.stun.net.Connection.getClanPlayers(clanTag);
-		LinkedList<String> firstTags = me.stun.io.ParseJsonFile.readClanPlayers();
-
-		for (int i = 0; i < firstTags.size(); i++) {
-
+		for (int l = 0; l < IO.playerTags.length; l++) {
 			try {
+				me.stun.net.Connection.getPlayerClanTag(IO.playerTags[l]);
+				String clanTag = me.stun.io.ParseJsonFile.readClanTag();
 
-				me.stun.net.Connection.getBattleHistory(firstTags.get(i));
-				LinkedList<String> battleTags = me.stun.io.ParseJsonFile.readBattleHistoryTags();
+				me.stun.net.Connection.getClanPlayers(clanTag);
+				LinkedList<String> firstTags = me.stun.io.ParseJsonFile.readClanPlayers();
 
-				for (int k = 0; k < battleTags.size(); k++) {
-					output.add(battleTags.get(k));
+				for (int i = 0; i < firstTags.size(); i++) {
+
+					me.stun.net.Connection.getBattleHistory(firstTags.get(i));
+					LinkedList<String> battleTags = me.stun.io.ParseJsonFile.readBattleHistoryTags();
+
+					for (int k = 0; k < battleTags.size(); k++) {
+						output.add(battleTags.get(k));
+					}
+
+					counter++;
+					Console.print("getting players " + counter + "/" + steps + "\t");
+					Console.printLine("playerTags.size() = " + output.size());
+
 				}
-
 			} catch (Exception e) {
 				Console.printLine("parsing failed");
 			}
-			Console.print("getting players " + i + "/50\t");
-			Console.printLine("playerTags.size() = " + output.size());
+
 		}
-
 		return output;
-
 	}
 
 	public static String getApiKey() throws IOException {

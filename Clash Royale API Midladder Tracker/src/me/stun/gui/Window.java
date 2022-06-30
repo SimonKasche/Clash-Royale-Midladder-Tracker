@@ -568,14 +568,14 @@ public class Window extends JFrame {
 		winConditionTitle.setText("Win Conditions / Deck");
 		winConditionTitle.setForeground(Color.WHITE);
 		winConditionTitle.setSize(200, 30);
-		winConditionTitle.setLocation(640, 500);
+		winConditionTitle.setLocation(647, 500);
 		cp.add(winConditionTitle);
 
 		splashTitle = new JLabel();
 		splashTitle.setText("Splash Cards / Deck");
 		splashTitle.setForeground(Color.WHITE);
 		splashTitle.setSize(200, 30);
-		splashTitle.setLocation(895, 500);
+		splashTitle.setLocation(893, 500);
 		cp.add(splashTitle);
 
 		matchesCounter = new JLabel();

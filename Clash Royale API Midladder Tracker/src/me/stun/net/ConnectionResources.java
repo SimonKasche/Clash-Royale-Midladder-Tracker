@@ -29,7 +29,7 @@ public class ConnectionResources {
 			LinkedList<String[]> matches = me.stun.io.ParseJsonFile.readBattleHistory();
 			me.stun.data.DataProcessor.addNewMatches(matches);
 			
-			me.stun.startup.StartupImage.progressbar.setValue(me.stun.startup.StartupImage.progressbar.getValue() + stepsize);
+			//me.stun.startup.StartupImage.progressbar.setValue(me.stun.startup.StartupImage.progressbar.getValue() + stepsize);
 
 		}
 
