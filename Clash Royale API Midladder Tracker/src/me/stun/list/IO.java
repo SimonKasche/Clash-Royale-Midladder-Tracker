@@ -198,12 +198,12 @@ public class IO {
 	public static String[] usedTags = new String[1000000];
 	public static int index;
 
-	public static void getUsedTags() {
+	public static void getUsedTags(String[][] matches) {
 
-		for (int i = 0; i < me.stun.data.DeckData.totalMatches.length; i++) {
-			usedTags[i] = me.stun.data.DeckData.totalMatches[i][8];
+		for (int i = 0; i < matches.length; i++) {
+			usedTags[i] = matches[i][8];
 		}
-		index = me.stun.data.DeckData.totalMatches.length;
+		index = matches.length;
 		for (int i = index; i < usedTags.length; i++) {
 			usedTags[i] = " ";
 		}
@@ -212,7 +212,7 @@ public class IO {
 
 	public static int counter2 = 0;
 
-	public static void addNewMatches(LinkedList<String[]> matches) {
+	public static void addNewMatches(LinkedList<String[]> matches, String[][] totalMatches) {
 
 		Console.print("\nadding new matches..");
 
@@ -222,7 +222,7 @@ public class IO {
 		int matchesSize = matches.size();
 		int tagsSize = usedTags.length - 1;
 
-		if (tagsSize <= 1 || me.stun.data.DeckData.totalMatches[0].length <= 1) {
+		if (tagsSize <= 1 || totalMatches[0].length <= 1) {
 			for (int i = 0; i < matchesSize; i++) {
 				addedMatches.add(matches.get(i));
 				counter++;
@@ -237,13 +237,9 @@ public class IO {
 					String temp = matches.get(i)[8];
 					String temp1 = matches.get(i)[11];
 
-					// System.out.println(
-					// "compared " + temp + " to " + usedTags[j] + "\tj = " + j + "\ttagsSize = " +
-					// tagsSize);
-
-					if (j < me.stun.data.DeckData.totalMatches.length) {
+					if (j < totalMatches.length) {
 						if (temp.equals(usedTags[j])
-								&& temp1.equals(me.stun.data.DeckData.totalMatches[j][11])) {
+								&& temp1.equals(totalMatches[j][11])) {
 							// if (temp.equals(usedTags[j])) {
 							found = true;
 							usedTags[index] = temp;

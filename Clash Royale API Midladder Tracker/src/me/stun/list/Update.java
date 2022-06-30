@@ -15,11 +15,11 @@ public class Update {
 	private static final DecimalFormat df = new DecimalFormat("0.000");
 	public static boolean wait = false;
 
-	public static void getPlayerData() throws IOException, ParseException {
+	public static void getPlayerData(String[][] totalMatches) throws IOException, ParseException {
 
 		IO.playerTags = readFile("src/PlayerTag.txt");
 		LinkedList<String> playerTags = getPlayerTags();
-		IO.getUsedTags();
+		IO.getUsedTags(totalMatches);
 
 		for (IO.playerTagCounter = 0; IO.playerTagCounter < playerTags.size() - 1; IO.playerTagCounter++) {
 
@@ -31,7 +31,7 @@ public class Update {
 
 				Long start = System.nanoTime();
 				LinkedList<String[]> matches = me.stun.io.ParseJsonFile.readBattleHistory();
-				IO.addNewMatches(matches);
+				IO.addNewMatches(matches, totalMatches);
 
 				double percentage = (double) playerTags.size() / IO.playerTagCounter * 100;
 				me.stun.gui.Window.downloadProgressBar.setValue((int) percentage);
@@ -73,6 +73,8 @@ public class Update {
 
 		for (int l = 0; l < IO.playerTags.length; l++) {
 			try {
+				output.add(IO.playerTags[l]);
+				
 				me.stun.net.Connection.getPlayerClanTag(IO.playerTags[l]);
 				String clanTag = me.stun.io.ParseJsonFile.readClanTag();
 

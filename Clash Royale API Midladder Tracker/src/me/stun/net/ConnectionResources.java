@@ -11,14 +11,10 @@ import me.stun.io.ArrayBuilder;
 
 public class ConnectionResources {
 
-	public static void getPlayerData() throws IOException, ParseException {
+	public static void getPlayerData(String[][] totalMatches) throws IOException, ParseException {
 		
 		me.stun.data.DataProcessor.playerTags = readFile("src/PlayerTag.txt");
 		me.stun.startup.Console.TextArea.append("establishing connection with api.clashroyale.com..\n");
-		
-		int steps = me.stun.data.DataProcessor.playerTags.length-1;
-		int stepsize = 0;
-		stepsize = 10 / steps;
 
 		for (me.stun.data.DataProcessor.playerTagCounter = 0; me.stun.data.DataProcessor.playerTagCounter < me.stun.data.DataProcessor.playerTags.length
 				- 1; me.stun.data.DataProcessor.playerTagCounter++) {
@@ -27,7 +23,7 @@ public class ConnectionResources {
 			Connection.getBattleHistory(me.stun.data.DataProcessor.playerTags[me.stun.data.DataProcessor.playerTagCounter]);
 
 			LinkedList<String[]> matches = me.stun.io.ParseJsonFile.readBattleHistory();
-			me.stun.data.DataProcessor.addNewMatches(matches);
+			me.stun.data.DataProcessor.addNewMatches(matches, totalMatches);
 			
 			//me.stun.startup.StartupImage.progressbar.setValue(me.stun.startup.StartupImage.progressbar.getValue() + stepsize);
 

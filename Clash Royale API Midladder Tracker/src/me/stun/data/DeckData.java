@@ -13,7 +13,7 @@ public class DeckData {
 	public static Map<String, Integer> cardCounter = new HashMap<String, Integer>();
 	public static Map<String, Integer> sortedCardCounter;
 
-	public static String[][] totalMatches;
+	// public static String[][] totalMatches;
 
 	public static String[][] matchesToArray(LinkedList<String[]> matches) {
 
@@ -103,9 +103,11 @@ public class DeckData {
 			usage[i] = counter;
 			counter = 0;
 
-			if (i % stepSize == 0)
-				me.stun.startup.StartupImage.plotProgressbar
-						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			if (stepSize != 0) {
+				if (i % stepSize == 0)
+					me.stun.startup.StartupImage.plotProgressbar
+							.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			}
 
 		}
 
@@ -150,9 +152,11 @@ public class DeckData {
 			usage[i] = counter;
 			counter = 0;
 
-			if (i % stepSize == 0)
-				me.stun.startup.StartupImage.plotProgressbar
-						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			if (stepSize != 0) {
+				if (i % stepSize == 0)
+					me.stun.startup.StartupImage.plotProgressbar
+							.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			}
 
 		}
 
@@ -197,9 +201,11 @@ public class DeckData {
 			usage[i] = counter;
 			counter = 0;
 
-			if (i % stepSize == 0)
-				me.stun.startup.StartupImage.plotProgressbar
-						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			if (stepSize != 0) {
+				if (i % stepSize == 0)
+					me.stun.startup.StartupImage.plotProgressbar
+							.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 1);
+			}
 
 		}
 

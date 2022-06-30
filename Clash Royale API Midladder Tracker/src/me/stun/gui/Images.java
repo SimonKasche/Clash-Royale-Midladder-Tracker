@@ -33,7 +33,7 @@ public class Images {
 	public static boolean gbarrelVisible = true;
 	public static boolean egiantVisible = true;
 
-	public static void addImages(JLabel cp) throws IOException {
+	public static void addImages(JLabel cp, String[][] matches) throws IOException {
 
 		// arrows
 
@@ -42,7 +42,7 @@ public class Images {
 		arrows.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (arrowsVisible == true) {
-					percentage("arrows", arrows);
+					percentage("arrows", arrows, matches);
 					arrowsVisible = false;
 				} else {
 					arrows.setVisible(true);
@@ -65,7 +65,7 @@ public class Images {
 		megaknight.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (megaknightVisible == true) {
-					percentage("mega knight", megaknight);
+					percentage("mega knight", megaknight, matches);
 					megaknightVisible = false;
 				} else {
 					megaknight.setVisible(true);
@@ -87,7 +87,7 @@ public class Images {
 		balloon.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (balloonVisible == true) {
-					percentage("balloon", balloon);
+					percentage("balloon", balloon, matches);
 					balloonVisible = false;
 				} else {
 					balloon.setVisible(true);
@@ -109,7 +109,7 @@ public class Images {
 		eq.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (eqVisible == true) {
-					percentage("earthquake", eq);
+					percentage("earthquake", eq, matches);
 					eqVisible = false;
 				} else {
 					eq.setVisible(true);
@@ -133,7 +133,7 @@ public class Images {
 
 			public void mouseClicked(MouseEvent me) {
 				if (ebarbsVisible == true) {
-					percentage("Elite Barbarians", abarbs);
+					percentage("Elite Barbarians", abarbs, matches);
 					ebarbsVisible = false;
 				} else {
 					abarbs.setVisible(true);
@@ -155,7 +155,7 @@ public class Images {
 		egolem.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (egolemVisible == true) {
-					percentage("Elixir Golem", egolem);
+					percentage("Elixir Golem", egolem, matches);
 					egolemVisible = false;
 				} else {
 					egolem.setVisible(true);
@@ -177,7 +177,7 @@ public class Images {
 		freeze.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (freezeVisible == true) {
-					percentage("Freeze", freeze);
+					percentage("Freeze", freeze, matches);
 					freezeVisible = false;
 				} else {
 					freeze.setVisible(true);
@@ -199,7 +199,7 @@ public class Images {
 		gbarrel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (gbarrelVisible == true) {
-					percentage("Goblin Barrel", gbarrel);
+					percentage("Goblin Barrel", gbarrel, matches);
 					gbarrelVisible = false;
 				} else {
 					gbarrel.setVisible(true);
@@ -221,7 +221,7 @@ public class Images {
 		golem.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (golemVisible == true) {
-					percentage("Golem", golem);
+					percentage("Golem", golem, matches);
 					golemVisible = false;
 				} else {
 					golem.setVisible(true);
@@ -243,7 +243,7 @@ public class Images {
 		hog.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (hogVisible == true) {
-					percentage("Hog Rider", hog);
+					percentage("Hog Rider", hog, matches);
 					hogVisible = false;
 				} else {
 					hog.setVisible(true);
@@ -265,7 +265,7 @@ public class Images {
 		lightning.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (lightningVisible == true) {
-					percentage("Lightning", lightning);
+					percentage("Lightning", lightning, matches);
 					lightningVisible = false;
 				} else {
 					lightning.setVisible(true);
@@ -287,7 +287,7 @@ public class Images {
 		rg.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (rgVisible == true) {
-					percentage("Royal Giant", rg);
+					percentage("Royal Giant", rg, matches);
 					rgVisible = false;
 				} else {
 					rg.setVisible(true);
@@ -309,7 +309,7 @@ public class Images {
 		valk.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (valkVisible == true) {
-					percentage("Valkyrie", valk);
+					percentage("Valkyrie", valk, matches);
 					valkVisible = false;
 				} else {
 					valk.setVisible(true);
@@ -331,7 +331,7 @@ public class Images {
 		witch.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (witchVisible == true) {
-					percentage("Witch", witch);
+					percentage("Witch", witch, matches);
 					witchVisible = false;
 				} else {
 					witch.setVisible(true);
@@ -353,7 +353,7 @@ public class Images {
 		wizard.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (wizardVisible == true) {
-					percentage("Wizard", wizard);
+					percentage("Wizard", wizard, matches);
 					wizardVisible = false;
 				} else {
 					wizard.setVisible(true);
@@ -375,7 +375,7 @@ public class Images {
 		egiant.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent me) {
 				if (egiantVisible == true) {
-					percentage("Electro Giant", egiant);
+					percentage("Electro Giant", egiant, matches);
 					egiantVisible = false;
 				} else {
 					egiant.setVisible(true);
@@ -392,7 +392,7 @@ public class Images {
 
 	}
 
-	public static void percentage(String key, JLabel label) {
+	public static void percentage(String key, JLabel label, String[][] matches) {
 
 		JLabel percentage = new JLabel();
 		percentage.setBounds(label.getBounds());
@@ -402,7 +402,7 @@ public class Images {
 
 		int scale = (int) Math.pow(10, 1);
 		String result = (float) Math
-				.round(me.stun.data.DataProcessor.getPercentage(me.stun.data.DeckData.totalMatches, key) * scale)
+				.round(me.stun.data.DataProcessor.getPercentage(matches, key) * scale)
 				/ scale + "%";
 
 		percentage.setText(result);

@@ -63,13 +63,13 @@ public class ArrayBuilder {
 		
 		String[][] readMatches = new String[lines][9];
 		BufferedReader br = new BufferedReader(new FileReader("matches.txt"));
+		System.out.println("reading matches..");
 	
 		String[] deck = new String[9];
 		int steps = lines / 35;
 	
 		for (int i = 0; i < lines; i++) {
 			String line = br.readLine();
-			System.out.println("reading match: " + i);
 			if (line == null || line.equals("")) {
 				// idfk
 			} else {
@@ -78,7 +78,7 @@ public class ArrayBuilder {
 					readMatches[i] = (deck);
 			}
 			
-			if(i % steps == 0) {
+			if(steps != 0 && i % steps == 0) {
 				me.stun.startup.StartupImage.progressbar.setValue(me.stun.startup.StartupImage.progressbar.getValue() + 1);
 			}
 			

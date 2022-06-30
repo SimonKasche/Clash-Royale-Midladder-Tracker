@@ -11,11 +11,9 @@ public class mainFile {
 		new me.stun.startup.Console();
 		new me.stun.startup.StartupImage();
 		
-		me.stun.data.DeckData.totalMatches = me.stun.io.ArrayBuilder.readPreviousMatchesArray();
-		me.stun.startup.StartupImage.progressbar.setValue(35);
 		me.stun.startup.Console.TextArea.append("opening window..\n");
 
-		new me.stun.gui.Window(me.stun.data.DeckData.totalMatches, null);
+		new me.stun.gui.Window(null);
 		me.stun.startup.StartupImage.instance.dispose();
 
 	}

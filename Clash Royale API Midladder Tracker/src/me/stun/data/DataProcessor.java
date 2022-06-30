@@ -5,24 +5,21 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import org.json.simple.parser.ParseException;
-
 import me.stun.io.ArrayBuilder;
-import me.stun.net.ConnectionResources;
 
 public class DataProcessor {
 	
 	public static String[] playerTags;
 	public static int playerTagCounter = 0;
 	
-	public static String[][] getMatchesPerPlayer(String playerID) {
+	public static String[][] getMatchesPerPlayer(String[][] totalMatches, String playerID) {
 
 		LinkedList<String[]> output = new LinkedList<String[]>();
 
-		for (int i = 0; i < DeckData.totalMatches.length; i++) {
+		for (int i = 0; i < totalMatches.length; i++) {
 
-			if (DeckData.totalMatches[i][9].equalsIgnoreCase(playerID)) {
-				output.add(DeckData.totalMatches[i]);
+			if (totalMatches[i][9].equalsIgnoreCase(playerID)) {
+				output.add(totalMatches[i]);
 			}
 
 		}
@@ -78,20 +75,20 @@ public class DataProcessor {
 
 	}
 
-	public static void addNewMatches(LinkedList<String[]> matches) {
+	public static void addNewMatches(LinkedList<String[]> matches, String[][] totalMatches) {
 
 		boolean found = false;
 		int counter = 0;
 
-		String[][] newMatches = new String[DeckData.totalMatches.length + matches.size()][DeckData.totalMatches[0].length];
-		for (int i = 0; i < DeckData.totalMatches.length; i++) {
+		String[][] newMatches = new String[totalMatches.length + matches.size()][totalMatches[0].length];
+		for (int i = 0; i < totalMatches.length; i++) {
 
-			newMatches[i] = DeckData.totalMatches[i];
+			newMatches[i] = totalMatches[i];
 
 		}
-		int index = DeckData.totalMatches.length;
+		int index = totalMatches.length;
 
-		if (DeckData.totalMatches.length <= 1 || DeckData.totalMatches[0].length <= 1) {
+		if (totalMatches.length <= 1 || totalMatches[0].length <= 1) {
 			System.out.println("unable to add matches matches.txt is empty");
 		} else {
 
@@ -100,9 +97,9 @@ public class DataProcessor {
 				for (int j = 0; j < newMatches.length; j++) {
 
 					if (newMatches[j][8] != null) {
-						if (matches.get(i)[8].equalsIgnoreCase(DeckData.totalMatches[j][8])) {
+						if (matches.get(i)[8].equalsIgnoreCase(totalMatches[j][8])) {
 							found = true;
-							j = DeckData.totalMatches.length;
+							j = totalMatches.length;
 						}
 					}else {
 						j = newMatches.length;
@@ -121,10 +118,10 @@ public class DataProcessor {
 			}
 		}
 		
-		DeckData.totalMatches = removeNullValues(newMatches);
+		totalMatches = removeNullValues(newMatches);
 
 		me.stun.startup.Console.TextArea.append("added '" + counter + "' new matches\n");
-		me.stun.startup.Console.TextArea.append("total matches recorded: '" + DeckData.totalMatches.length + "'\n");
+		me.stun.startup.Console.TextArea.append("total matches recorded: '" + totalMatches.length + "'\n");
 
 	}
 	
@@ -150,36 +147,5 @@ public class DataProcessor {
 		return output;
 		
 	}
-
-	public static boolean stopDownloading = true;
-
-	public static void downloadRandomData() throws IOException, ParseException {
-
-		playerTags = ConnectionResources.readFile("src/PlayerTag.txt");
-		me.stun.startup.Console.TextArea.append("establishing connection with api.clashroyale.com..\n");
-		stopDownloading = false;
-		while (stopDownloading == false) {
-			for (playerTagCounter = 0; playerTagCounter < playerTags.length - 1; playerTagCounter++) {
-
-				StringBuilder sb = new StringBuilder(playerTags[playerTagCounter]);
-				sb.replace(0, 1, "%23");
-
-				// read battle history from clash royale api
-				me.stun.net.Connection.getBattleHistory(sb.toString());
-
-				LinkedList<String[]> matches = me.stun.io.ParseJsonFile.readBattleHistory();
-				addNewMatches(matches);
-
-			}
-
-			for (int i = playerTags.length - 1; i >= 0; i--) {
-
-				playerTags[i] = DeckData.totalMatches[DeckData.totalMatches.length - i - 1][8];
-
-			}
-		}
-
-	}
-	
 	
 }

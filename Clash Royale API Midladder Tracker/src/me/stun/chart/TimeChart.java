@@ -30,9 +30,9 @@ public class TimeChart {
 	private static XYDataset dataset;
 	public static boolean build = false;
 
-	public static ChartPanel buildPlot() {
+	public static ChartPanel buildPlot(String[][] matches) {
 
-		dataset = createTimeDataset();
+		dataset = createTimeDataset(matches);
 
 		JFreeChart chart = ChartFactory.createXYLineChart("", "time", "usage", dataset, PlotOrientation.VERTICAL, true,
 				true, false);
@@ -45,7 +45,7 @@ public class TimeChart {
 		splineRenderer.setSeriesShapesVisible(2, false);
 		splineRenderer.setPrecision(1);
 		splineRenderer.setBaseLegendShape(new Rectangle(150, 10));
-		splineRenderer.setLegendLine(new Rectangle(90,1));
+		splineRenderer.setLegendLine(new Rectangle(90, 1));
 
 		chart.getXYPlot().getRangeAxis().setLowerMargin(0.1);
 		chart.getXYPlot().getRangeAxis().setUpperMargin(0.25);
@@ -98,11 +98,7 @@ public class TimeChart {
 
 	}
 
-	public static XYDataset createTimeDataset() {
-
-		String[][] matches = me.stun.data.DeckData.totalMatches;
-
-		// -------------------------------------------------------------------------------------
+	public static XYDataset createTimeDataset(String[][] matches) {
 
 		int counter = 0;
 
@@ -237,16 +233,20 @@ public class TimeChart {
 
 			}
 
-			if (i % stepSize == 0) {
-				me.stun.startup.StartupImage.plotProgressbar
-						.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 5);
-				me.stun.thread.ProgressbarWorker.progress = me.stun.thread.ProgressbarWorker.progress + 2;
+			if (stepSize != 0) {
+				if (i % stepSize == 0) {
+					me.stun.startup.StartupImage.plotProgressbar
+							.setValue(me.stun.startup.StartupImage.plotProgressbar.getValue() + 5);
+					me.stun.thread.ProgressbarWorker.progress = me.stun.thread.ProgressbarWorker.progress + 2;
+				}
 			}
-			if (i % steps == 0) {
+			if (steps != 0) {
+				if (i % steps == 0) {
 
-				me.stun.startup.StartupImage.progressbar
-						.setValue(me.stun.startup.StartupImage.progressbar.getValue() + 1);
+					me.stun.startup.StartupImage.progressbar
+							.setValue(me.stun.startup.StartupImage.progressbar.getValue() + 1);
 
+				}
 			}
 
 		}
@@ -254,7 +254,7 @@ public class TimeChart {
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(false);
 		build = true;
 
-		float averageFloat = me.stun.data.DataProcessor.getPercentage(DeckData.totalMatches, displayedCard);
+		float averageFloat = me.stun.data.DataProcessor.getPercentage(matches, displayedCard);
 		average.add(Double.parseDouble(times.get(0)), averageFloat);
 		average.add(Double.parseDouble(times.get(times.size() - 1)), averageFloat);
 

@@ -6,6 +6,14 @@ public class ListUpdater extends Thread {
 	
 	public static boolean running = false;
 	public static boolean stop = false;
+	
+	public String[][] totalMatches;
+	
+	public ListUpdater(String[][] matches) {
+		
+		this.totalMatches = matches;
+		
+	}
 
 	@SuppressWarnings("deprecation")
 	public void run() {
@@ -18,9 +26,9 @@ public class ListUpdater extends Thread {
 			Long start = System.nanoTime();
 
 			Console.printLine("reading match data..");
-			Update.getPlayerData();
+			Update.getPlayerData(totalMatches);
 
-			String[][] matches = IO.addMatchesToArray(IO.addedMatches, me.stun.data.DeckData.totalMatches);
+			String[][] matches = IO.addMatchesToArray(IO.addedMatches, totalMatches);
 			Console.print("\nsaving matches to matches.txt.. ");
 			IO.writeArray(matches);
 

@@ -36,9 +36,12 @@ import me.stun.thread.UpdateWorker;
 @SuppressWarnings("serial")
 public class Window extends JFrame {
 
+	public Window instance;
+
 	public String[][] matches;
 	public String playerTag;
 
+	public static String[][] staticMatches;
 	public static Container cp;
 
 	public static JButton editPlayerTag;
@@ -58,6 +61,7 @@ public class Window extends JFrame {
 	public static JButton pauseDownload;
 	public static JButton stopDownload;
 	public static JButton listRepair;
+	public static JButton toggleTheme;
 
 	public static JLabel spellTitle;
 	public static JLabel winConditionTitle;
@@ -67,6 +71,7 @@ public class Window extends JFrame {
 	public static JLabel recorded;
 	public static JLabel downloadOutput;
 	public static Thread downloadingThread;
+	public static boolean darkMode = true;
 
 	public static int chartState = 0; // 0-totalUsage 1-usageTrophies 2-usageTime
 	public static JButton totalUsageButton;
@@ -77,11 +82,11 @@ public class Window extends JFrame {
 	public static JProgressBar progressbar = new JProgressBar();
 	public static JProgressBar downloadProgressBar;
 	public static ProgressbarWorker worker = new ProgressbarWorker();
-	public static UpdateWorker updateWorker = new UpdateWorker();
+	public static UpdateWorker updateWorker;
 	public static RepairManager repairWorker = new RepairManager();
 	public static JPanel cupChartContainer = new JPanel();
 	public static JPanel timeChartContainer = new JPanel();
-	
+
 	public static JCheckBox averageBox = new JCheckBox();
 	public static JCheckBox rawDataBox = new JCheckBox();
 	public static JCheckBox smoothBox = new JCheckBox();
@@ -92,14 +97,26 @@ public class Window extends JFrame {
 	public static Color menudark = new Color(0x212326);
 	public static Color dark = new Color(0x2c2f33);
 	public static Color hoverColor = new Color(0x737373);
+	public static Color hoverColor2 = new Color(0x363a3f);
 	public static Font font = new Font("Helvetica", Font.PLAIN, 40);
 
-	public Window(String[][] matches1, String playertag) throws IOException {
+	public Window(String playertag) throws IOException {
 
 		super();
 
+		this.instance = this;
 		this.playerTag = playertag;
-		this.matches = matches1;
+
+		if (playertag == null) {
+			this.matches = me.stun.io.ArrayBuilder.readPreviousMatchesArray();
+			staticMatches = this.matches;
+		} else {
+			this.matches = me.stun.data.DataProcessor.getMatchesPerPlayer(staticMatches, playertag);
+		}
+
+		String[][] accessableMatches = this.matches;
+
+		me.stun.startup.StartupImage.progressbar.setValue(35);
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		int frameWidth = 1280;
@@ -129,7 +146,7 @@ public class Window extends JFrame {
 		JPanel background = new JPanel();
 		background.setLocation(301, 0);
 		background.setSize(979, 770);
-		background.setBackground(new Color(0x212326));
+		background.setBackground(menudark);
 
 		progressbar = new JProgressBar();
 		progressbar.setBounds(301, 0, frameWidth - 317, 10);
@@ -137,14 +154,14 @@ public class Window extends JFrame {
 		progressbar.setForeground(Color.GREEN);
 		progressbar.setVisible(false);
 		cp.add(progressbar);
-		
+
 		downloadProgressBar = new JProgressBar();
 		downloadProgressBar.setBounds(0, 350, 299, 10);
 		downloadProgressBar.setValue(0);
 		downloadProgressBar.setForeground(Color.GREEN);
 		downloadProgressBar.setVisible(false);
 		cp.add(downloadProgressBar);
-		
+
 		JLabel title = new JLabel();
 		title.setText("Midladder Tracker");
 		title.setFont(font);
@@ -174,7 +191,7 @@ public class Window extends JFrame {
 
 		editPlayerTag.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				editPlayerTag.setBackground(new Color(0x363a3f));
+				editPlayerTag.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -205,7 +222,7 @@ public class Window extends JFrame {
 
 		apiKey.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				apiKey.setBackground(new Color(0x363a3f));
+				apiKey.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -235,7 +252,7 @@ public class Window extends JFrame {
 
 		oldWindow.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				oldWindow.setBackground(new Color(0x363a3f));
+				oldWindow.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -277,7 +294,7 @@ public class Window extends JFrame {
 
 		update.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				update.setBackground(new Color(0x363a3f));
+				update.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -326,7 +343,7 @@ public class Window extends JFrame {
 		searchBarTitlePlayerTag = new JLabel();
 		searchBarTitlePlayerTag.setBounds(30, 540, 241, 30);
 		searchBarTitlePlayerTag.setForeground(Color.WHITE);
-		searchBarTitlePlayerTag.setText("Search Player Tag (broken)");
+		searchBarTitlePlayerTag.setText("Search Player Tag");
 		searchBarTitlePlayerTag.setHorizontalAlignment(SwingConstants.LEFT);
 		cp.add(searchBarTitlePlayerTag);
 
@@ -340,18 +357,22 @@ public class Window extends JFrame {
 		playerTagSearchButton.setFocusPainted(false);
 		playerTagSearchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
+
 				try {
-					new me.stun.gui.Window(me.stun.data.DataProcessor.getMatchesPerPlayer(searchbarPlayerTag.getText()),
-							searchbarPlayerTag.getText());
+					new me.stun.startup.StartupImage();
+					me.stun.startup.StartupImage.progressbar.setValue(0);
+					new me.stun.gui.Window(searchbarPlayerTag.getText());
+					me.stun.startup.StartupImage.instance.dispose();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+
 			}
 		});
 
 		playerTagSearchButton.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				playerTagSearchButton.setBackground(new Color(0x363a3f));
+				playerTagSearchButton.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -388,7 +409,7 @@ public class Window extends JFrame {
 		});
 		consoletoggle.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				consoletoggle.setBackground(new Color(0x363a3f));
+				consoletoggle.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -420,7 +441,7 @@ public class Window extends JFrame {
 
 		listRepair.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				listRepair.setBackground(new Color(0x363a3f));
+				listRepair.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -430,11 +451,59 @@ public class Window extends JFrame {
 
 		cp.add(listRepair);
 		cp.add(playerTagSearchButton);
+		
+		//TODO
+		toggleTheme = new JButton("Light Theme");
+		toggleTheme.setBackground(dark);
+		toggleTheme.setHorizontalAlignment(SwingConstants.CENTER);
+		toggleTheme.setVerticalAlignment(SwingConstants.CENTER);
+		toggleTheme.setForeground(Color.WHITE);
+		toggleTheme.setBounds(0, 350, 300, 50);
+		toggleTheme.setBorder(BorderFactory.createEmptyBorder());
+		toggleTheme.setFocusPainted(false);
+		toggleTheme.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+
+				if(darkMode == true) {
+					
+					darkMode = false;
+					
+					dark = new Color(0xebebeb);
+					menudark = Color.WHITE;
+					hoverColor2 = Color.WHITE;
+					
+				}else {
+					
+					darkMode = true;
+					
+					dark = new Color(0x2c2f33);
+					menudark = new Color(0x212326);
+					hoverColor2 = new Color(0x363a3f);
+					
+				}
+				
+				java.awt.Window[] windows = getOwnerlessWindows();
+				for (int i = 0; i < windows.length; i++) {
+				    windows[i].repaint();
+				}
+
+			}
+		});
+		toggleTheme.addMouseListener(new MouseAdapter() {
+			public void mouseEntered(MouseEvent evt) {
+				toggleTheme.setBackground(hoverColor2);
+			}
+
+			public void mouseExited(MouseEvent evt) {
+				toggleTheme.setBackground(dark);
+			}
+		});
+		cp.add(toggleTheme);
 
 		// Download More Data
 		// ------------------------------------------------------------------------------------------------------------------------
 
-		listUpdater = new ListUpdater();
+		listUpdater = new ListUpdater(accessableMatches);
 		downloadMoreData = new JButton("Update Matches");
 		downloadMoreData.setBackground(dark);
 		downloadMoreData.setHorizontalAlignment(SwingConstants.CENTER);
@@ -466,7 +535,7 @@ public class Window extends JFrame {
 		});
 		downloadMoreData.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				downloadMoreData.setBackground(new Color(0x363a3f));
+				downloadMoreData.setBackground(hoverColor2);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -600,16 +669,10 @@ public class Window extends JFrame {
 		recorded.setSize(200, 60);
 		recorded.setLocation(1134, 625);
 		cp.add(recorded);
-		
-		//TODO CheckBoxes
 
-		System.out.println("converting list to array");
-		// me.Stun.Chart.deckData.matchesToArray();
-		System.out.println("writing array to file..");
-		me.stun.io.ArrayBuilder.writeArray(me.stun.data.DeckData.totalMatches);
 		System.out.println("building spells dial plot..");
 
-		ChartPanel spells = me.stun.chart.SpellsDial.buildDialPlot(me.stun.data.DeckData.totalMatches, 0, 4, 1);
+		ChartPanel spells = me.stun.chart.SpellsDial.buildDialPlot(this.matches, 0, 4, 1);
 		spells.setBackground(dark);
 		spells.setLocation(370, 530);
 		spells.setSize(200, 200);
@@ -617,8 +680,7 @@ public class Window extends JFrame {
 
 		System.out.println("building win condition dial plot..");
 
-		ChartPanel winConditions = me.stun.chart.WinConditionDial.buildDialPlot(me.stun.data.DeckData.totalMatches, 0,
-				3, 1);
+		ChartPanel winConditions = me.stun.chart.WinConditionDial.buildDialPlot(this.matches, 0, 3, 1);
 		winConditions.setBackground(dark);
 		winConditions.setLocation(610, 530);
 		winConditions.setSize(200, 200);
@@ -626,7 +688,7 @@ public class Window extends JFrame {
 
 		System.out.println("building splash dial plot..");
 
-		ChartPanel splash = me.stun.chart.SplashDial.buildDialPlot(me.stun.data.DeckData.totalMatches, 0, 6, 1);
+		ChartPanel splash = me.stun.chart.SplashDial.buildDialPlot(this.matches, 0, 6, 1);
 		splash.setBackground(dark);
 		splash.setLocation(850, 530);
 		splash.setSize(200, 200);
@@ -657,8 +719,8 @@ public class Window extends JFrame {
 		JPanel barChartContainer = new JPanel();
 		barChartContainer.setSize(920, 400);
 		barChartContainer.setLocation(315, 100);
-		DeckData.getCardUsage(me.stun.data.DeckData.totalMatches);
-		barChartContainer.add(me.stun.chart.BarChart.getBarChart("", playerTag, me.stun.data.DeckData.totalMatches));
+		DeckData.getCardUsage(this.matches);
+		barChartContainer.add(me.stun.chart.BarChart.getBarChart("", playerTag, this.matches));
 		cp.add(barChartContainer);
 		System.out.print("done\n");
 
@@ -668,18 +730,18 @@ public class Window extends JFrame {
 		cupChartContainer.setBackground(menudark);
 		cupChartContainer.setSize(920, 400);
 		cupChartContainer.setLocation(315, 100);
-		cupChartContainer.add(me.stun.chart.CupsChart.getLineChart("", playerTag, me.stun.data.DeckData.totalMatches));
+		cupChartContainer.add(me.stun.chart.CupsChart.getLineChart("", playerTag, this.matches));
 		cupChartContainer.setVisible(false);
 		cp.add(cupChartContainer);
 		System.out.print("done");
 
 		me.stun.startup.StartupImage.progressbar.setValue(90);
-		System.out.print("calculating time chart data..\t");
+		System.out.print("\ncalculating time chart data..\t");
 		timeChartContainer = new JPanel();
 		timeChartContainer.setSize(920, 400);
 		timeChartContainer.setLocation(315, 100);
 		timeChartContainer.setBackground(menudark);
-		timeChartContainer.add(me.stun.chart.TimeChart.buildPlot());
+		timeChartContainer.add(me.stun.chart.TimeChart.buildPlot(this.matches));
 		timeChartContainer.setVisible(false);
 		cp.add(timeChartContainer);
 		System.out.print("done");
@@ -690,7 +752,7 @@ public class Window extends JFrame {
 		// chart buttons
 
 		totalUsageButton = new JButton("Total Usage");
-		totalUsageButton.setBackground(menudark);
+		totalUsageButton.setBackground(dark);
 		totalUsageButton.setHorizontalAlignment(SwingConstants.CENTER);
 		totalUsageButton.setVerticalAlignment(SwingConstants.CENTER);
 		totalUsageButton.setForeground(Color.WHITE);
@@ -727,7 +789,7 @@ public class Window extends JFrame {
 		cp.add(totalUsageButton);
 
 		cupsUsageButton = new JButton("Cups / Usage");
-		cupsUsageButton.setBackground(dark);
+		cupsUsageButton.setBackground(menudark);
 		cupsUsageButton.setHorizontalAlignment(SwingConstants.CENTER);
 		cupsUsageButton.setVerticalAlignment(SwingConstants.CENTER);
 		cupsUsageButton.setForeground(Color.WHITE);
@@ -763,7 +825,7 @@ public class Window extends JFrame {
 		cp.add(cupsUsageButton);
 
 		timeUsageButton = new JButton("Time / Usage");
-		timeUsageButton.setBackground(dark);
+		timeUsageButton.setBackground(menudark);
 		timeUsageButton.setHorizontalAlignment(SwingConstants.CENTER);
 		timeUsageButton.setVerticalAlignment(SwingConstants.CENTER);
 		timeUsageButton.setForeground(Color.WHITE);
@@ -773,7 +835,7 @@ public class Window extends JFrame {
 		timeUsageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				if (me.stun.chart.TimeChart.build == false) {
-					timeChartContainer.add(me.stun.chart.TimeChart.buildPlot());
+					// timeChartContainer.add(me.stun.chart.TimeChart.buildPlot());
 					me.stun.chart.TimeChart.build = true;
 				}
 
@@ -822,7 +884,7 @@ public class Window extends JFrame {
 				me.stun.chart.TimeChart.displayedCard = (String) cardMenu.getSelectedItem();
 				me.stun.chart.CupsChart.displayedCard = (String) cardMenu.getSelectedItem();
 
-				updateWorker = new UpdateWorker();
+				updateWorker = new UpdateWorker(accessableMatches);
 				updateWorker.start();
 
 			}
@@ -844,8 +906,7 @@ public class Window extends JFrame {
 	}
 
 	public void bSearch_ActionPerformed(ActionEvent evt) {
-		float percentage = me.stun.data.DataProcessor.getPercentage(me.stun.data.DeckData.totalMatches,
-				searchbar.getText());
+		float percentage = me.stun.data.DataProcessor.getPercentage(this.matches, searchbar.getText());
 		if (percentage == 0) {
 			output.setText("card not found");
 		} else {

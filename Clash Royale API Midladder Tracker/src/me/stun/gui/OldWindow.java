@@ -34,7 +34,7 @@ public class OldWindow extends JFrame {
 	public static JButton update;
 	public static String playerTag;
 	
-	String[][] matches;
+	public String[][] matches;
 
 	@SuppressWarnings("static-access")
 	public OldWindow(String[][] matches1, String playertag) throws IOException {
@@ -43,6 +43,8 @@ public class OldWindow extends JFrame {
 		
 		this.playerTag = playertag;
 		this.matches = matches1;
+		
+		String[][] accessableMatches = this.matches;
 
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		int frameWidth = 1350;
@@ -77,7 +79,7 @@ public class OldWindow extends JFrame {
 		button.setFocusPainted(false);
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				me.stun.chart.BarChart.launch(me.stun.data.DeckData.totalMatches, playerTag);
+				me.stun.chart.BarChart.launch(accessableMatches, playerTag);
 			}
 		});
 		background.add(button);
@@ -92,8 +94,8 @@ public class OldWindow extends JFrame {
 		Averagebutton.setFocusPainted(false);
 		Averagebutton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				me.stun.chart.SpellsDial.launch(me.stun.data.DeckData.totalMatches);
-				me.stun.chart.WinConditionDial.launch(me.stun.data.DeckData.totalMatches);
+				me.stun.chart.SpellsDial.launch(accessableMatches);
+				me.stun.chart.WinConditionDial.launch(accessableMatches);
 			}
 		});
 		background.add(Averagebutton);
@@ -117,7 +119,6 @@ public class OldWindow extends JFrame {
                         try {
 							me.stun.mainFile.main(null);
 						} catch (IOException | ParseException | InterruptedException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						};
 
@@ -128,7 +129,7 @@ public class OldWindow extends JFrame {
 		});
 		background.add(update);
 
-		Images.addImages(background);
+		Images.addImages(background, this.matches);
 		setContentPane(panel);
 		setVisible(true);
 

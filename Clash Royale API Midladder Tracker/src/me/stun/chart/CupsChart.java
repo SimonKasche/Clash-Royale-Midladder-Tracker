@@ -28,7 +28,7 @@ public class CupsChart {
 	public static XYSeries density;
 
 	public static ChartPanel getLineChart(String chartTitle, String playerTag, String[][] matches) {
-		JFreeChart lineChart = ChartFactory.createXYLineChart(chartTitle, "Cups", "Percentage", createCupsDataset(),
+		JFreeChart lineChart = ChartFactory.createXYLineChart(chartTitle, "Cups", "Percentage", createCupsDataset(matches),
 				PlotOrientation.VERTICAL, true, true, false);
 
 		XYSplineRenderer splineRenderer = new XYSplineRenderer();
@@ -65,8 +65,7 @@ public class CupsChart {
 		return chartPanel;
 	}
 
-	public static XYDataset createCupsDataset() {
-		String[][] matches = me.stun.data.DeckData.totalMatches;
+	public static XYDataset createCupsDataset(String[][] matches) {
 
 		// -------------------------------------------------------------------------------------
 
@@ -199,7 +198,7 @@ public class CupsChart {
 		me.stun.startup.StartupImage.plotProgressbar.setVisible(false);
 		me.stun.thread.ProgressbarWorker.running = false;
 
-		float averageFloat = me.stun.data.DataProcessor.getPercentage(DeckData.totalMatches, displayedCard);
+		float averageFloat = me.stun.data.DataProcessor.getPercentage(matches, displayedCard);
 		average.add((double) cupValues.get(0), averageFloat);
 		average.add((double) cupValues.get(cupValues.size() - 1), averageFloat);
 
