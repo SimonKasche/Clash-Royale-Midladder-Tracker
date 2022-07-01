@@ -33,13 +33,17 @@ public class Update {
 				LinkedList<String[]> matches = me.stun.io.ParseJsonFile.readBattleHistory();
 				IO.addNewMatches(matches, totalMatches);
 
-				double percentage = (double) playerTags.size() / IO.playerTagCounter * 100;
+				double percentage = (double) IO.playerTagCounter / playerTags.size() * 100;
 				me.stun.gui.Window.downloadProgressBar.setValue((int) percentage);
+				
+				Long calculation = System.nanoTime() - start;
+				Long estimatedTime = ((connectionEnd - connectionStart) + calculation) * (playerTags.size() - IO.playerTagCounter);
 
 				Console.print("\t" + IO.playerTagCounter + "/" + playerTags.size() + "\t addedmatches.size() = "
 						+ IO.addedMatches.size());
-				Console.print("\tcalc = " + df.format((System.nanoTime() - start) / 1e+9) + "s");
+				Console.print("\tcalc = " + df.format(calculation / 1e+9) + "s");
 				Console.print("\tresponse = " + df.format((connectionEnd - connectionStart) / 1e+9) + "s");
+				Console.print("\testimated time remaining = " + df.format(estimatedTime / 6e+10) + "min");
 
 				if (wait == true) {
 
@@ -52,12 +56,15 @@ public class Update {
 
 					// stop download
 					me.stun.gui.Window.stopDownload.setText("Stopping..");
+					me.stun.gui.Window.downloadProgressBar.setVisible(false);
+					me.stun.gui.Window.downloadProgressBar.setValue(0);
+					
 					IO.playerTagCounter = playerTags.size();
 
 				}
 
 			} catch (Exception e) {
-				Console.print("\trequest failed: ");
+				Console.print("\trequest failed: " + e.toString());
 				e.printStackTrace();
 			}
 
@@ -91,7 +98,7 @@ public class Update {
 					}
 
 					counter++;
-					Console.print("getting players " + counter + "/" + steps + "\t");
+					Console.print("preparing download: getting players " + counter + "/~" + (steps-50) + "\t");
 					Console.printLine("playerTags.size() = " + output.size());
 
 				}

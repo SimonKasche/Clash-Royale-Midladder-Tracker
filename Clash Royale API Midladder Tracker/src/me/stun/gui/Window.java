@@ -156,7 +156,7 @@ public class Window extends JFrame {
 		cp.add(progressbar);
 
 		downloadProgressBar = new JProgressBar();
-		downloadProgressBar.setBounds(0, 350, 299, 10);
+		downloadProgressBar.setBounds(0, 400, 299, 10);
 		downloadProgressBar.setValue(0);
 		downloadProgressBar.setForeground(Color.GREEN);
 		downloadProgressBar.setVisible(false);
@@ -363,8 +363,13 @@ public class Window extends JFrame {
 					me.stun.startup.StartupImage.progressbar.setValue(0);
 					new me.stun.gui.Window(searchbarPlayerTag.getText());
 					me.stun.startup.StartupImage.instance.dispose();
-				} catch (IOException e) {
-					e.printStackTrace();
+					
+				} catch (Exception e) {
+					
+					output.setText("tag not found or valid");
+					me.stun.startup.StartupImage.instance.dispose();
+					System.out.println("\nerror: " + e.toString());
+					
 				}
 
 			}
@@ -451,9 +456,8 @@ public class Window extends JFrame {
 
 		cp.add(listRepair);
 		cp.add(playerTagSearchButton);
-		
-		//TODO
-		toggleTheme = new JButton("Light Theme");
+
+		toggleTheme = new JButton("Light Theme (broken)");
 		toggleTheme.setBackground(dark);
 		toggleTheme.setHorizontalAlignment(SwingConstants.CENTER);
 		toggleTheme.setVerticalAlignment(SwingConstants.CENTER);
@@ -464,28 +468,26 @@ public class Window extends JFrame {
 		toggleTheme.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 
-				if(darkMode == true) {
-					
+				if (darkMode == true) {
+
 					darkMode = false;
-					
+
 					dark = new Color(0xebebeb);
 					menudark = Color.WHITE;
 					hoverColor2 = Color.WHITE;
-					
-				}else {
-					
+
+				} else {
+
 					darkMode = true;
-					
+
 					dark = new Color(0x2c2f33);
 					menudark = new Color(0x212326);
 					hoverColor2 = new Color(0x363a3f);
-					
+
 				}
-				
-				java.awt.Window[] windows = getOwnerlessWindows();
-				for (int i = 0; i < windows.length; i++) {
-				    windows[i].repaint();
-				}
+
+				revalidate();
+				repaint();
 
 			}
 		});
@@ -704,7 +706,14 @@ public class Window extends JFrame {
 		bSearch.setBounds(290, 1000, 75, 25);
 		bSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
-				bSearch_ActionPerformed(evt);
+
+				float percentage = me.stun.data.DataProcessor.getPercentage(accessableMatches, searchbar.getText());
+				if (percentage == 0) {
+					output.setText("card not found");
+				} else {
+					output.setText(percentage + "%");
+				}
+
 			}
 		});
 		bSearch.setVisible(true);
@@ -725,12 +734,14 @@ public class Window extends JFrame {
 		System.out.print("done\n");
 
 		me.stun.startup.StartupImage.progressbar.setValue(75);
-		System.out.print("calculating cups data..\t");
+		System.out.print("calculating cups data..\t\t");
 		cupChartContainer = new JPanel();
 		cupChartContainer.setBackground(menudark);
 		cupChartContainer.setSize(920, 400);
 		cupChartContainer.setLocation(315, 100);
-		cupChartContainer.add(me.stun.chart.CupsChart.getLineChart("", playerTag, this.matches));
+		ChartPanel cupsChartPanel = me.stun.chart.CupsChart.getLineChart("", playerTag, this.matches);
+		me.stun.thread.UpdateWorker.addCupsActionListener(cupsChartPanel);
+		cupChartContainer.add(cupsChartPanel);
 		cupChartContainer.setVisible(false);
 		cp.add(cupChartContainer);
 		System.out.print("done");
@@ -741,7 +752,9 @@ public class Window extends JFrame {
 		timeChartContainer.setSize(920, 400);
 		timeChartContainer.setLocation(315, 100);
 		timeChartContainer.setBackground(menudark);
-		timeChartContainer.add(me.stun.chart.TimeChart.buildPlot(this.matches));
+		ChartPanel timeChartPanel = me.stun.chart.TimeChart.buildPlot(this.matches);
+		me.stun.thread.UpdateWorker.addTimeActionListener(timeChartPanel);
+		timeChartContainer.add(timeChartPanel);
 		timeChartContainer.setVisible(false);
 		cp.add(timeChartContainer);
 		System.out.print("done");
@@ -903,15 +916,6 @@ public class Window extends JFrame {
 		invalidate();
 		validate();
 
-	}
-
-	public void bSearch_ActionPerformed(ActionEvent evt) {
-		float percentage = me.stun.data.DataProcessor.getPercentage(this.matches, searchbar.getText());
-		if (percentage == 0) {
-			output.setText("card not found");
-		} else {
-			output.setText(percentage + "%");
-		}
 	}
 
 }

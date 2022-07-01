@@ -26,6 +26,10 @@ public class TimeChart {
 
 	public static JFrame frame = new JFrame();
 	public static String displayedCard = "Archer Queen";
+	
+	public static Color valuePaint;
+	public static Color averagePaint;
+	public static Color smoothPaint;
 
 	private static XYDataset dataset;
 	public static boolean build = false;
@@ -53,9 +57,13 @@ public class TimeChart {
 		chart.getLegend().setBackgroundPaint(me.stun.gui.Window.menudark);
 		chart.getLegend().setFrame(BlockBorder.NONE);
 		chart.getLegend().setItemPaint(Color.WHITE);
+		
+		averagePaint = (Color) splineRenderer.getSeriesPaint(1);
+		valuePaint = (Color) splineRenderer.getSeriesPaint(2);
+		smoothPaint = (Color) splineRenderer.getSeriesPaint(0);	
+		
 		XYPlot plot = chart.getXYPlot();
 		plot.setRenderer(0, splineRenderer);
-
 		plot.setDomainGridlinesVisible(false);
 		plot.setRangeGridlinesVisible(false);
 		plot.setBackgroundPaint(me.stun.gui.Window.menudark);

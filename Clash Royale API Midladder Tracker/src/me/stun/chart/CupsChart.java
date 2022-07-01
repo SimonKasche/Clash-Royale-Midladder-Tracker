@@ -26,6 +26,10 @@ public class CupsChart {
 	public static JFrame frame = new JFrame();
 	public static String displayedCard = "Archer Queen";
 	public static XYSeries density;
+	
+	public static Color valuePaint;
+	public static Color averagePaint;
+	public static Color densityPaint;
 
 	public static ChartPanel getLineChart(String chartTitle, String playerTag, String[][] matches) {
 		JFreeChart lineChart = ChartFactory.createXYLineChart(chartTitle, "Cups", "Percentage", createCupsDataset(matches),
@@ -44,9 +48,9 @@ public class CupsChart {
 		lineChart.getLegend().setBackgroundPaint(me.stun.gui.Window.menudark);
 		lineChart.getLegend().setFrame(BlockBorder.NONE);
 		lineChart.getLegend().setItemPaint(Color.WHITE);
+		
 		XYPlot plot = lineChart.getXYPlot();
 		plot.setRenderer(splineRenderer);
-
 		plot.setDomainGridlinesVisible(false);
 		plot.setRangeGridlinesVisible(false);
 		plot.setBackgroundPaint(me.stun.gui.Window.menudark);
@@ -58,6 +62,10 @@ public class CupsChart {
 		plot.getRangeAxis().setAxisLinePaint(Color.WHITE);
 		plot.getRangeAxis().setLabelPaint(Color.WHITE);
 		plot.getRangeAxis().setTickLabelPaint(Color.WHITE);
+		
+		averagePaint = (Color) splineRenderer.getSeriesPaint(0);
+		valuePaint = (Color) splineRenderer.getSeriesPaint(1);
+		densityPaint = (Color) splineRenderer.getSeriesPaint(2);	
 
 		ChartPanel chartPanel = new ChartPanel(lineChart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(920, 400));
