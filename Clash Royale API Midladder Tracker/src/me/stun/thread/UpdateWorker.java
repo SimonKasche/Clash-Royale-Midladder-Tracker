@@ -81,11 +81,8 @@ public class UpdateWorker extends Thread{
 							renderer.setSeriesPaint(2, Window.menudark);
 
 					}
-					
-					System.out.println("instance");
 
 				}
-				System.out.println("lol");
 
 			}
 

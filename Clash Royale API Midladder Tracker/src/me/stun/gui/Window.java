@@ -98,6 +98,7 @@ public class Window extends JFrame {
 	public static Color dark = new Color(0x2c2f33);
 	public static Color hoverColor = new Color(0x737373);
 	public static Color hoverColor2 = new Color(0x363a3f);
+	public static Color blue = new Color(0x4c87c8);
 	public static Font font = new Font("Helvetica", Font.PLAIN, 40);
 
 	public Window(String playertag) throws IOException {
@@ -763,9 +764,15 @@ public class Window extends JFrame {
 
 		// ----------------------------------------------------------------------------------select
 		// chart buttons
-
+		
+		JLabel indicator = new JLabel();
+		indicator.setBackground(blue);
+		indicator.setOpaque(true);
+		indicator.setBounds(400, 67, 110, 3);
+		cp.add(indicator);
+		
 		totalUsageButton = new JButton("Total Usage");
-		totalUsageButton.setBackground(dark);
+		totalUsageButton.setBackground(menudark);
 		totalUsageButton.setHorizontalAlignment(SwingConstants.CENTER);
 		totalUsageButton.setVerticalAlignment(SwingConstants.CENTER);
 		totalUsageButton.setForeground(Color.WHITE);
@@ -775,8 +782,7 @@ public class Window extends JFrame {
 		totalUsageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				chartState = 0;
-				cupsUsageButton.setBackground(menudark);
-				timeUsageButton.setBackground(menudark);
+				indicator.setLocation(400, 67);
 
 				barChartContainer.setVisible(true);
 				timeChartContainer.setVisible(false);
@@ -787,7 +793,7 @@ public class Window extends JFrame {
 
 		totalUsageButton.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				totalUsageButton.setBackground(hoverColor);
+				totalUsageButton.setBackground(dark);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -812,9 +818,8 @@ public class Window extends JFrame {
 		cupsUsageButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent evt) {
 				chartState = 1;
-				timeUsageButton.setBackground(menudark);
-				totalUsageButton.setBackground(menudark);
-
+				indicator.setLocation(510, 67);
+				
 				barChartContainer.setVisible(false);
 				timeChartContainer.setVisible(false);
 				cupChartContainer.setVisible(true);
@@ -824,7 +829,7 @@ public class Window extends JFrame {
 
 		cupsUsageButton.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				cupsUsageButton.setBackground(hoverColor);
+				cupsUsageButton.setBackground(dark);
 			}
 
 			public void mouseExited(MouseEvent evt) {
@@ -851,10 +856,9 @@ public class Window extends JFrame {
 					// timeChartContainer.add(me.stun.chart.TimeChart.buildPlot());
 					me.stun.chart.TimeChart.build = true;
 				}
-
+				
+				indicator.setLocation(620, 67);
 				chartState = 2;
-				cupsUsageButton.setBackground(menudark);
-				totalUsageButton.setBackground(menudark);
 
 				barChartContainer.setVisible(false);
 				timeChartContainer.setVisible(true);
@@ -865,7 +869,7 @@ public class Window extends JFrame {
 
 		timeUsageButton.addMouseListener(new MouseAdapter() {
 			public void mouseEntered(MouseEvent evt) {
-				timeUsageButton.setBackground(hoverColor);
+				timeUsageButton.setBackground(dark);
 			}
 
 			public void mouseExited(MouseEvent evt) {
